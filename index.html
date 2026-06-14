@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -226,6 +226,7 @@
             <button class="tab-btn" data-tab="study" onclick="switchTab('study')">📚 学业通知</button>
             <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎪 活动进行中</button>
             <button class="tab-btn" data-tab="pastevents" onclick="switchTab('pastevents')">📋 过往活动</button>
+            <button class="tab-btn" data-tab="timetable" onclick="switchTab('timetable')">🗓 本周课表</button>
             <button class="tab-btn" data-tab="raw" onclick="switchTab('raw')">📜 原始消息</button>
         </div>
         <div class="summary-content" id="summaryContent">
@@ -256,6 +257,57 @@
         ];
 
         messages.sort((a, b) => new Date(a.time.replace(/(\d+)\.(\d+)/g, '$1/$2')) - new Date(b.time.replace(/(\d+)\.(\d+)/g, '$1/$2')));
+
+        // ===== 课表数据 =====
+        const timetable = [
+            { day: '周一（6.15）', slots: [
+                { period: '1-2节', course: '计算机系统基础 - 周翔', room: '西院3号实验楼106' },
+                { period: '5-6节', course: '面向对象程序设计方法 - 王国栋', room: '西院1教301' },
+                { period: '7-8节', course: '离散数学II - 周翔', room: '西院1教408' },
+                { period: '11节', course: '野生动物欣赏与保护 - 张艳', room: '西院2教311' }
+            ]},
+            { day: '周二（6.16）', slots: [
+                { period: '1-2节', course: '大学英语读写译IV - 蒋轶群', room: '西院2号实验楼113' },
+                { period: '3-4节', course: '体育II [男] - 李林越', room: '金家岭东院田径场' },
+                { period: '5-6节', course: '面向对象程序设计方法 - 王国栋', room: '西院3号实验楼106' },
+                { period: '7-8节', course: 'C语言课程设计 - 赵毅', room: '东院1教206' }
+            ]},
+            { day: '周三（6.17）', slots: [
+                { period: '1-2节', course: '大学英语视听说IV - 蒋轶群', room: '西院2号实验楼104' },
+                { period: '1-2节', course: '中国近现代史纲要 - 赵阳', room: '西院1教307' },
+                { period: '3-4节', course: '高等数学I（下）- 邵崑', room: '西院2教109' },
+                { period: '7-8节', course: '中国近现代史纲要 - 赵阳', room: '西院1教307' },
+                { period: '11节', course: '当代国际关系与热点问题 - 丛霞', room: '西院1教203' }
+            ]},
+            { day: '周四（6.18）', slots: [
+                { period: '1-2节', course: '大学物理学III - 郑威', room: '西院1教102' },
+                { period: '3-4节', course: '线性代数I - 东春彦', room: '西院1教308' },
+                { period: '5-6节', course: '计算机系统基础 - 周翔', room: '西院2教202' },
+                { period: '7-8节', course: '高等数学I（下）- 邵崑', room: '西院2教103' }
+            ]},
+            { day: '周五（6.19）', slots: [
+                { period: '1-2节', course: '大学物理学III - 郑威', room: '西院1教307' },
+                { period: '5-6节', course: '高等数学I（下）- 邵崑', room: '西院2教109' },
+                { period: '11节', course: '创新创业基础 - 韩晓', room: '西院1教303' }
+            ]},
+            { day: '周六（6.20）', slots: [
+                { period: '全天', course: '无课程安排', room: '' }
+            ]},
+            { day: '周日（6.21）', slots: [
+                { period: '1-8节', course: '计算机创新实践 - 纪俊', room: '东院1教206' }
+            ]}
+        ];
+
+        // 节次对照
+        const periodMap = {
+            '1-2节': '1、2节 (08:00-09:50)',
+            '3-4节': '3、4节 (10:10-12:00)',
+            '5-6节': '5、6节 (14:00-15:50)',
+            '7-8节': '7、8节 (16:10-18:00)',
+            '9-10节': '9、10节 (18:30-20:20)',
+            '11节': '11节 (20:30-21:15)',
+            '1-8节': '1-8节 (08:00-18:00)'
+        };
 
         // ===== 渲染 =====
         function buildCalendar() {
@@ -351,6 +403,39 @@
             return html;
         }
 
+        function buildTimetable() {
+            let html = '<div class="section-title">🗓 本周课表（6.15 - 6.21）</div>';
+            
+            // 时间说明
+            html += '<div class="stat-row">';
+            html += '<div class="stat-card"><div class="num">' + timetable.length + '</div><div class="label">上课天数</div></div>';
+            const totalSlots = timetable.reduce((sum, d) => sum + d.slots.length, 0);
+            html += '<div class="stat-card"><div class="num">' + totalSlots + '</div><div class="label">课程节次</div></div>';
+            html += '</div>';
+            
+            // 节次说明
+            html += '<div class="sub-title">⏰ 节次说明</div>';
+            html += '<div style="font-size:12px;color:#888;margin-bottom:12px;line-height:1.6;">';
+            html += '1、2节(08:00-09:50) | 3、4节(10:10-12:00) | 5、6节(14:00-15:50)<br>';
+            html += '7、8节(16:10-18:00) | 9、10节(18:30-20:20) | 11节(20:30-21:15)';
+            html += '</div>';
+            
+            timetable.forEach(d => {
+                // 判断今天
+                const isToday = d.day.includes('6.16') || d.day.includes('6.17') || d.day.includes('6.14');
+                html += '<div class="section-title"' + (isToday ? ' style="border-bottom-color:#c53030;"' : '') + '>' + d.day + '</div>';
+                
+                d.slots.forEach(s => {
+                    const periodInfo = periodMap[s.period] || s.period;
+                    const isNow = false; // 可以改为根据当前时间判断
+                    html += '<div class="msg-item"' + (isNow ? ' style="border-left-color:#c53030;background:#fff5f5;"' : '') + '>' +
+                        '<div><span class="msg-sender">' + s.period + '</span><span class="msg-time">' + periodInfo + '</span></div>' +
+                        '<div class="msg-text"><strong>' + s.course + '</strong>' + (s.room ? ' @ ' + s.room : '') + '</div></div>';
+                });
+            });
+            return html;
+        }
+
         function buildRaw() {
             let html = '<div class="section-title">📜 原始消息</div>';
             messages.forEach(m => {
@@ -373,6 +458,7 @@
                 case 'study': content.innerHTML = buildStudy(); break;
                 case 'events': content.innerHTML = buildEvents(); break;
                 case 'pastevents': content.innerHTML = buildPastEvents(); break;
+                case 'timetable': content.innerHTML = buildTimetable(); break;
                 case 'raw': content.innerHTML = buildRaw(); break;
             }
         }
@@ -381,3 +467,4 @@
     </script>
 </body>
 </html>
+
