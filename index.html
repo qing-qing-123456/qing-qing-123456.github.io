@@ -58,7 +58,7 @@
         <div>
             <h1>25计科03班 · 群消息汇总 <span class="header-sub">群聊记录</span></h1>
         </div>
-        <span class="header-updated">🔄 2026-06-15 22:10 更新</span>
+        <span class="header-updated">🔄 2026-06-15 22:14 AI自动更新</span>
     </div>
     <div class="summary-section">
         <div class="summary-tabs">
@@ -76,45 +76,73 @@
         // ====== 群消息数据 ======
         const messages = [
   {"sender":"潘林(3605855525)","text":"@全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈","time":"2026-06-15T22:05:32.000Z","type":"event"}
-];
+]
+
+        // 今天的消息单独标记（用于AI总结判断）
+        const todayStr = '2026-06-15';
+        const todayMessages = messages.filter(m => m.time.startsWith(todayStr));;
         
         messages.sort((a, b) => new Date(a.time) - new Date(b.time));
 
         // ====== AI 分析总结（每日自动生成） ======
         function buildAISummary() {
-            if (messages.length === 0) {
-                return '<div class="ai-summary"><div class="ai-title">今日AI总结</div><p>今天群聊暂无新消息。</p></div>';
+            const td = todayMessages;
+            
+            if (td.length === 0) {
+                return '<div class="ai-summary"><div class="ai-title">🤖 今日AI总结</div><p>今天群聊暂无新消息，一切平静～</p></div>';
             }
             
-            // 统计
-            const total = messages.length;
-            const eventCount = messages.filter(m => m.type === 'event').length;
-            const studyCount = messages.filter(m => m.type === 'study').length;
+            const total = td.length;
+            const eventCount = td.filter(m => m.type === 'event' || !m.type).length;
+            const studyCount = td.filter(m => m.type === 'study').length;
             
-            // 提取关键事件
-            const importantMsgs = messages.filter(m => m.text.includes('截止') || m.text.includes('考试') || m.text.includes('作业') || m.text.includes('通知'));
+            // 提取关键事件关键词
+            const importantMsgs = td.filter(m => m.text.includes('截止') || m.text.includes('考试') || m.text.includes('作业') || m.text.includes('通知'));
             
-            // 生成今日总结内容
-            let summaryHtml = '<div class="ai-summary">';
-            summaryHtml += '<div class="ai-title">今日AI总结</div>';
+            let html = '<div class="ai-summary">';
+            html += '<div class="ai-title">🤖 今日AI总结</div>';
             
             // 1. 概览
-            summaryHtml += '<p><strong>📊 今日概览：</strong>共 ' + total + ' 条消息';
-            if (eventCount > 0) summaryHtml += '，' + eventCount + ' 个事件';
-            if (studyCount > 0) summaryHtml += '，' + studyCount + ' 个学习计划';
-            summaryHtml += '。</p>';
+            html += '<p><strong>📊 今日概览：</strong>6月15日（周一）共 ' + total + ' 条消息';
+            if (eventCount > 0) html += '，' + eventCount + ' 个事件';
+            if (studyCount > 0) html += '，' + studyCount + ' 个学习计划';
+            html += '。</p>';
             
-            // 2. 重要事件
+            // 2. 重要提醒
             if (importantMsgs.length > 0) {
-                summaryHtml += '<p><strong>🔔 重要提醒：</strong></p><ul>';
+                html += '<p><strong>🔔 重要提醒：</strong></p><ul>';
                 importantMsgs.forEach(m => {
-                    summaryHtml += '<li><strong>' + m.sender.split('(')[0] + '</strong>：' + m.text.replace(/@全体成员\s*/g, '').replace(/\[表情\s*\]/g, '') + '</li>';
+                    const sender = m.sender.split('(')[0];
+                    let text = m.text.replace(/@全体成员\s*/g, '').replace(/\[表情\s*\]/g, '').trim();
+                    html += '<li><strong>' + sender + '</strong>：' + text + '</li>';
                 });
-                summaryHtml += '</ul>';
+                html += '</ul>';
             }
             
-            summaryHtml += '</div>';
-            return summaryHtml;
+            // 3. AI分类提炼
+            html += '<p><strong>📋 分类提炼：</strong></p><ul>';
+            
+            // 事件类
+            const eventMsgs = td.filter(m => m.text.includes('截止') || m.text.includes('考试'));
+            if (eventMsgs.length > 0) {
+                html += '<li><span class="tag tag-red">事件</span> <strong>截止/考试提醒</strong> — ';
+                const texts = eventMsgs.map(m => m.text.replace(/@全体成员\s*/g, '').replace(/\[表情\s*\]/g, '').trim());
+                html += texts.join('；');
+                html += '</li>';
+            }
+            
+            html += '<li><span class="tag tag-purple">日常</span> 暂无其他分类消息</li>';
+            html += '</ul>';
+            
+            // 4. 一句话总结
+            if (importantMsgs.length > 0) {
+                html += '<p><strong>💡 一句话总结：</strong>';
+                html += '军事理论网课今晚截止，16-20号期末考，潘林同学在群里提醒了大家。同学们注意时间节点！';
+                html += '</p>';
+            }
+            
+            html += '</div>';
+            return html;
         }
 
         function buildCalendar() {
@@ -123,7 +151,9 @@
             html += '<div class="section-title" style="border-bottom-color:#c53030;">🔰 近期重点</div>';
             html += '<div class="msg-item importance-high">' +
                 '<div><span class="msg-sender" style="color:#d97706;">📌 6月15日（今日）</span></div>' +
-                '<div class="msg-text">军事理论知到网课今晚截止，6月16日-20日期末考试<br>来源：潘林 @全体成员</div></div>';
+                '<div class="msg-text">⚡ <strong>军事理论</strong>知到网课今晚截止<br>' +
+                '⚡ <strong>期末考试</strong>6月16日（明天）至6月20日<br>' +
+                '来源：潘林 @全体成员</div></div>';
             
             html += '<div class="section-title">📅 群聊日历</div>';
             html += '<table><tr><th style="width:120px;">日期</th><th>事件/学习</th><th>消息数</th></tr>';
