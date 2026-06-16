@@ -282,10 +282,11 @@
             {time:"2026-06-12 12:48", sender:"那你懂我意思了.", text:"📢 四级准考证可以下载打印啦！\nhttps://cet-bm.neea.edu.cn/", type:"study"},
             {time:"2026-06-13 00:26", sender:"啓", text:"XCTF 百城千赛·高校AI+安全选拔赛-青岛大学站\n使用组织码 Z7CBU3JY54AW 在 攻防世界 报名\nQQ群：784697982", type:"event"},
             {time:"2026-06-13 00:33", sender:"啓", text:"学生会换届竞选结果公示", type:"event"},
-            {time:"2026-06-13 00:34", sender:"啓", text:"📢 2026春季第二次学生证补办\n6.10下午3点截止！\n费用：学生证5元/优惠卡7元/都办12元\n交至博知楼316", type:"study"}
+            {time:"2026-06-13 00:34", sender:"啓", text:"📢 2026春季第二次学生证补办\n6.10下午3点截止！\n费用：学生证5元/优惠卡7元/都办12元\n交至博知楼316", type:"study"},
+            {time:"2026-06-15 22:05", sender:"潘林(3605855525)", text:"@全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈", type:"study"}
         ];
 
-        messages.sort((a, b) => new Date(a.time.replace(/(\d+)\.(\d+)/g, '$1/$2')) - new Date(b.time.replace(/(\d+)\.(\d+)/g, '$1/$2')));
+        messages.sort((a, b) => new Date(a.time) - new Date(b.time));
 
         // ===== 课表数据 =====
         const timetable = [
@@ -340,16 +341,12 @@
         function buildCalendar() {
             // 待办事项（置顶）
             const now = new Date();
-            now.setDate(now.getDate() + 1); // 明天 6.14
             const todayStr = now.toISOString().slice(0,10);
             
             let html = '<div class="section-title" style="border-bottom-color:#c53030;">⏰ 待办事项</div>';
             html += '<div class="msg-item" style="border-left-color:#c53030;background:#fff5f5;">' +
-                '<div><span class="msg-sender" style="color:#c53030;">📌 6月14日 晚7:15-8:15</span></div>' +
-                '<div class="msg-text"><strong>活动改期·图文中心三楼学术报告厅</strong> — 卿卿 @全体成员</div></div>';
-            html += '<div class="msg-item" style="border-left-color:#d97706;background:#fffbe6;">' +
-                '<div><span class="msg-sender" style="color:#d97706;">📌 6月15日前</span></div>' +
-                '<div class="msg-text"><strong>知到（智慧树）军事理论课</strong> — 刷课截止6.15，考试截止6.20</div></div>';
+                '<div><span class="msg-sender" style="color:#c53030;">📌 6月16日-6月20日 · 军事理论期末考</span></div>' +
+                '<div class="msg-text"><strong>知到（智慧树）军事理论课考试</strong> — 6月15日已截止刷课，6.16-6.20期末考试！来源：潘林 @全体成员</div></div>';
             html += '<br>';
             
             // 活动日历
@@ -447,16 +444,27 @@
             html += '7、8节(16:10-18:00) | 9、10节(18:30-20:20) | 11节(20:30-21:15)';
             html += '</div>';
             
+            // 获取今天日期用于判断
+            const nowDate = new Date();
+            const todayMD = (nowDate.getMonth()+1) + '.' + nowDate.getDate();
+            
             timetable.forEach(d => {
-                // 判断今天
-                const isToday = d.day.includes('6.16') || d.day.includes('6.17') || d.day.includes('6.14');
+                const isToday = d.day.includes(todayMD);
                 html += '<div class="section-title"' + (isToday ? ' style="border-bottom-color:#c53030;"' : '') + '>' + d.day + '</div>';
                 
                 d.slots.forEach(s => {
                     const periodInfo = periodMap[s.period] || s.period;
-                    const isNow = false; // 可以改为根据当前时间判断
-                    html += '<div class="msg-item"' + (isNow ? ' style="border-left-color:#c53030;background:#fff5f5;"' : '') + '>' +
-                        '<div><span class="msg-sender">' + s.period + '</span><span class="msg-time">' + periodInfo + '</span></div>' +
+                    // 判断当前节次是否正在进行中（上课中或即将上）
+                const hour = nowDate.getHours();
+                const minute = nowDate.getMinutes();
+                let isNow = false;
+                if (s.period === '1-2节' && isToday && hour >= 8 && hour < 10) isNow = true;
+                else if (s.period === '3-4节' && isToday && hour >= 10 && hour < 12) isNow = true;
+                else if (s.period === '5-6节' && isToday && hour >= 14 && hour < 16) isNow = true;
+                else if (s.period === '7-8节' && isToday && hour >= 16 && hour < 18) isNow = true;
+                else if (s.period === '11节' && isToday && hour >= 20 && hour < 22) isNow = true;
+                html += '<div class="msg-item"' + (isNow ? ' style="border-left-color:#c53030;background:#fff5f5;"' : '') + '>' +
+                        '<div><span class="msg-sender">' + s.period + '</span><span class="msg-time">' + periodInfo + '</span>' + (isNow ? ' <span class="tag tag-red">上课中</span>' : '') + '</div>' +
                         '<div class="msg-text"><strong>' + s.course + '</strong>' + (s.room ? ' @ ' + s.room : '') + '</div></div>';
                 });
             });
