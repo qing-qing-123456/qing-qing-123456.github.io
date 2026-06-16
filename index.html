@@ -464,7 +464,7 @@
                 else if (s.period === '7-8节' && isToday && hour >= 16 && hour < 18) isNow = true;
                 else if (s.period === '11节' && isToday && hour >= 20 && hour < 22) isNow = true;
                 html += '<div class="msg-item"' + (isNow ? ' style="border-left-color:#c53030;background:#fff5f5;"' : '') + '>' +
-                        '<div><span class="msg-sender">' + s.period + '</span><span class="msg-time">' + periodInfo + '</span>' + (isNow ? ' <span class="tag tag-red">上课中</span>' : '') + '</div>' +
+                        '<div><span class="msg-sender">' + s.period + '</span><span class="msg-time">' + periodInfo + '</span></div>' +
                         '<div class="msg-text"><strong>' + s.course + '</strong>' + (s.room ? ' @ ' + s.room : '') + '</div></div>';
                 });
             });
