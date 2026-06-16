@@ -1,257 +1,497 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>25计科03班 · 群消息汇总</title>
+    <title>25计科03群 · 消息汇总</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f7fa; height: 100vh; display: flex; flex-direction: column; }
-        .header { background: #fff; padding: 18px 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; flex-wrap: wrap; gap: 8px; }
-        .header h1 { color: #1a1a2e; font-size: 22px; margin: 0; }
-        .header-sub { color: #888; font-size: 13px; font-weight: normal; margin-left: 10px; }
-        .header-updated { color: #1C64F2; font-size: 12px; font-weight: normal; }
-        .summary-section { flex: 1; padding: 20px 30px; overflow: hidden; display: flex; flex-direction: column; }
-        .summary-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-shrink: 0; flex-wrap: wrap; }
-        .tab-btn { padding: 8px 20px; border: 1px solid #ddd; background: #fff; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
-        .tab-btn.active { background: #1C64F2; color: #fff; border-color: #1C64F2; }
-        .tab-btn:hover:not(.active) { background: #f0f4ff; }
-        .summary-content { flex: 1; overflow-y: auto; background: #fff; border-radius: 10px; border: 1px solid #e8ecf0; padding: 24px 28px; font-size: 14px; line-height: 1.7; }
-        .section-title { font-size: 18px; font-weight: 600; color: #1a1a2e; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #1C64F2; }
-        .section-title:first-child { margin-top: 0; }
-        .sub-title { font-size: 15px; font-weight: 600; color: #2d3748; margin: 14px 0 6px; }
-        p { margin: 4px 0; color: #333; }
-        .msg-item { padding: 10px 14px; margin: 6px 0; background: #f8fafc; border-left: 3px solid #1C64F2; border-radius: 4px; }
-        .msg-sender { font-weight: 600; color: #1C64F2; font-size: 13px; }
-        .msg-time { color: #888; font-size: 12px; margin-left: 8px; }
-        .msg-text { margin-top: 4px; white-space: pre-wrap; word-break: break-word; }
-        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin: 2px 4px 2px 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background-color: #fff;
+            padding: 18px 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .header h1 {
+            color: #1a1a2e;
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .header-sub {
+            color: #888;
+            font-size: 13px;
+            font-weight: normal;
+            margin-left: 10px;
+        }
+        
+        .summary-section {
+            flex: 1;
+            padding: 20px 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+
+        .tab-btn.active {
+            background: #1C64F2;
+            color: #fff;
+            border-color: #1C64F2;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #f0f4ff;
+        }
+
+        .summary-content {
+            flex: 1;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #e8ecf0;
+            padding: 24px 28px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin: 20px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #1C64F2;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .sub-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 14px 0 6px;
+        }
+
+        p {
+            margin: 4px 0;
+            color: #333;
+        }
+
+        .msg-item {
+            padding: 10px 14px;
+            margin: 6px 0;
+            background: #f8fafc;
+            border-left: 3px solid #1C64F2;
+            border-radius: 4px;
+        }
+
+        .msg-sender {
+            font-weight: 600;
+            color: #1C64F2;
+            font-size: 13px;
+        }
+
+        .msg-time {
+            color: #888;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .msg-text {
+            margin-top: 4px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin: 2px 4px 2px 0;
+        }
+
         .tag-red { background: #fde8e8; color: #c53030; }
         .tag-purple { background: #f0e8ff; color: #6b3fa0; }
         .tag-green { background: #e6f7ed; color: #0f7b3e; }
-        .tag-blue { background: #dbeafe; color: #1e40af; }
-        .tag-orange { background: #ffedd5; color: #c2410c; }
-        table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
-        th, td { border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; }
-        th { background: #f0f4ff; font-weight: 600; }
-        .stat-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0; }
-        .stat-card { background: #f8fafc; border-radius: 8px; padding: 12px 18px; min-width: 120px; text-align: center; flex: 1; }
-        .stat-card .num { font-size: 24px; font-weight: 700; color: #1C64F2; }
-        .stat-card .label { font-size: 12px; color: #888; margin-top: 2px; }
-        .empty-tip { color: #999; text-align: center; padding: 40px 0; }
-        .ai-summary { background: linear-gradient(135deg, #f0f4ff, #eef2ff); border: 1px solid #c7d2fe; border-radius: 10px; padding: 18px 22px; margin-bottom: 16px; }
-        .ai-summary .ai-title { font-size: 16px; font-weight: 600; color: #4338ca; margin-bottom: 8px; }
-        .ai-summary .ai-title::before { content: '🤖 '; }
-        .ai-summary ul { margin: 6px 0 6px 20px; }
-        .ai-summary li { margin: 4px 0; }
-        .importance-high { border-left-color: #d97706 !important; background: #fffbeb !important; }
-        .importance-high .msg-text { color: #92400e; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #f0f4ff;
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: #fffbe6;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px 18px;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .stat-card .num {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1C64F2;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .empty-tip {
+            color: #999;
+            text-align: center;
+            padding: 40px 0;
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #aaa; }
-        @media (max-width: 600px) { .header { padding: 14px 16px; } .summary-section { padding: 12px 16px; } .summary-content { padding: 16px; } .stat-card { min-width: 80px; } }
+
+        /* ===== 手机端适配 ===== */
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .header h1 { font-size: 17px; }
+            .header-sub { font-size: 11px; margin-left: 6px; }
+            .summary-section { padding: 12px 12px; }
+            .summary-tabs { gap: 4px; margin-bottom: 10px; }
+            .tab-btn { padding: 5px 8px; font-size: 11px; }
+            .summary-content { padding: 14px 16px; font-size: 13px; }
+            .section-title { font-size: 15px; }
+            .msg-item { padding: 8px 10px; }
+            .msg-sender { font-size: 12px; }
+            .msg-time { font-size: 11px; margin-left: 4px; }
+            .msg-text { font-size: 12px; }
+            table { font-size: 11px; }
+            th, td { padding: 5px 8px; }
+            .stat-card { padding: 8px 12px; min-width: 80px; }
+            .stat-card .num { font-size: 18px; }
+            .sub-title { font-size: 13px; }
+        }
+
+        @media (max-width: 480px) {
+            .tab-btn { padding: 4px 6px; font-size: 10px; gap: 2px; }
+            .summary-tabs { gap: 3px; }
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <div>
-            <h1>25计科03班 · 群消息汇总 <span class="header-sub">群聊记录</span></h1>
-        </div>
-        <span class="header-updated">🔄 2026-06-15 22:14 AI自动更新</span>
+        <h1>25计科03班 · 群消息汇总 <span class="header-sub">05/12 ~ 今日</span></h1>
     </div>
+
     <div class="summary-section">
         <div class="summary-tabs">
-            <button class="tab-btn active" data-tab="calendar" onclick="switchTab('calendar')">📒 群聊日历</button>
-            <button class="tab-btn" data-tab="study" onclick="switchTab('study')">📚 学习计划</button>
-            <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎪 群聊事件</button>
-            <button class="tab-btn" data-tab="pastevents" onclick="switchTab('pastevents')">🗋 过往群聊</button>
+            <button class="tab-btn active" data-tab="calendar" onclick="switchTab('calendar')">📅 活动日历</button>
+            <button class="tab-btn" data-tab="timetable" onclick="switchTab('timetable')">🗓 本周课表</button>
+            <button class="tab-btn" data-tab="study" onclick="switchTab('study')">📚 学业通知</button>
+            <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎪 活动进行中</button>
+            <button class="tab-btn" data-tab="pastevents" onclick="switchTab('pastevents')">📋 过往活动</button>
             <button class="tab-btn" data-tab="raw" onclick="switchTab('raw')">📜 原始消息</button>
         </div>
         <div class="summary-content" id="summaryContent">
             <p class="empty-tip">加载中...</p>
         </div>
     </div>
+
     <script>
-        // ====== 群消息数据 ======
+        // ===== 群消息数据 =====
         const messages = [
-  {"sender":"潘林(3605855525)","text":"@全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈","time":"2026-06-15T22:05:32.000Z","type":"event"}
-]
+            {time:"2026-05-12 14:20", sender:"啓", text:'📣 @all "青心向国 大梦启航"大地彩绘活动即将举办...活动通过掌印彩绘、创意白T绘制等形式完成主题创作。参与可获证书+第二课堂学时+综测。\n时间：5.16 上午9点\n地点：浮山海月广场', type:"event"},
+            {time:"2026-05-12 14:21", sender:"啓", text:"青岛大学首届 AI 智能体创新大赛（决赛）通知。", type:"event"},
+            {time:"2026-05-13 14:07", sender:"啓", text:"五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com", type:"event"},
+            {time:"2026-05-13 14:07", sender:"啓", text:"https://mp.weixin.qq.com/s/U1gZCrsKM3a7nW_RAE1J2A", type:"event"},
+            {time:"2026-05-14 09:07", sender:"啓", text:'"情系故土，礼赞家乡"主题公益活动\n时间：5.13-5.22\n扫码上传摄影作品（家乡风光/人文/民俗），获综测+学时+公益证书。一等奖可获国家级媒体专访。\n活动QQ群：1078753135', type:"event"},
+            {time:"2026-05-16 11:33", sender:"啓", text:"2026年校排球赛队员召集令\n男女混合制（至少2位女同学）\n5.28开赛，5.19报名截止\n浮山西院排球场", type:"event"},
+            {time:"2026-05-16 18:37", sender:"啓", text:"2026校园健康跑报名通知\n5.23比赛，5.19下午4点截止\n男女各限15人，参赛记第二课堂", type:"event"},
+            {time:"2026-05-19 12:13", sender:"啓", text:"「妙笔纾心，向阳逐光」绘画解压活动\n时间：5.21下午1:40-3:00\n地点：博知楼511\n仅10个名额，扫码报名", type:"event"},
+            {time:"2026-05-23 19:26", sender:"啓", text:"公开竞选2026届学生会主席团及各中心负责人\n主席团限2024级，中心负责人2024/2025均可\n报名截止5.28 12:00\n材料交至博知楼316", type:"event"},
+            {time:"2026-05-26 12:36", sender:"啓", text:"山东省第八届大学生艺术展演选拔\n报名材料发至邮箱430078583@qq.com", type:"event"},
+            {time:"2026-05-28 18:05", sender:"啓", text:'"大学生进社区"实践案例征集\n5.31中午12点截止\n发至邮箱 qdu_jsjzyzxh@126.com', type:"event"},
+            {time:"2026-06-10 10:55", sender:"那你懂我意思了.", text:"⏰ 知到（智慧树）军事理论课 6.15截止刷课，6.20截止考试！大家抓紧", type:"study"},
+            {time:"2026-06-10 14:36", sender:"啓", text:"华为×济南博赛「蒲公英人才计划」\n496元考7张华为认证证书（含HCIA-AI、鸿蒙等）\n全程线上，名额有限", type:"event"},
+            {time:"2026-06-12 12:48", sender:"那你懂我意思了.", text:"📢 四级准考证可以下载打印啦！\nhttps://cet-bm.neea.edu.cn/", type:"study"},
+            {time:"2026-06-13 00:26", sender:"啓", text:"XCTF 百城千赛·高校AI+安全选拔赛-青岛大学站\n使用组织码 Z7CBU3JY54AW 在 攻防世界 报名\nQQ群：784697982", type:"event"},
+            {time:"2026-06-13 00:33", sender:"啓", text:"学生会换届竞选结果公示", type:"event"},
+            {time:"2026-06-13 00:34", sender:"啓", text:"📢 2026春季第二次学生证补办\n6.10下午3点截止！\n费用：学生证5元/优惠卡7元/都办12元\n交至博知楼316", type:"study"}
+        ];
 
-        // 今天的消息单独标记（用于AI总结判断）
-        const todayStr = '2026-06-15';
-        const todayMessages = messages.filter(m => m.time.startsWith(todayStr));;
-        
-        messages.sort((a, b) => new Date(a.time) - new Date(b.time));
+        messages.sort((a, b) => new Date(a.time.replace(/(\d+)\.(\d+)/g, '$1/$2')) - new Date(b.time.replace(/(\d+)\.(\d+)/g, '$1/$2')));
 
-        // ====== AI 分析总结（每日自动生成） ======
-        function buildAISummary() {
-            const td = todayMessages;
-            
-            if (td.length === 0) {
-                return '<div class="ai-summary"><div class="ai-title">🤖 今日AI总结</div><p>今天群聊暂无新消息，一切平静～</p></div>';
-            }
-            
-            const total = td.length;
-            const eventCount = td.filter(m => m.type === 'event' || !m.type).length;
-            const studyCount = td.filter(m => m.type === 'study').length;
-            
-            // 提取关键事件关键词
-            const importantMsgs = td.filter(m => m.text.includes('截止') || m.text.includes('考试') || m.text.includes('作业') || m.text.includes('通知'));
-            
-            let html = '<div class="ai-summary">';
-            html += '<div class="ai-title">🤖 今日AI总结</div>';
-            
-            // 1. 概览
-            html += '<p><strong>📊 今日概览：</strong>6月15日（周一）共 ' + total + ' 条消息';
-            if (eventCount > 0) html += '，' + eventCount + ' 个事件';
-            if (studyCount > 0) html += '，' + studyCount + ' 个学习计划';
-            html += '。</p>';
-            
-            // 2. 重要提醒
-            if (importantMsgs.length > 0) {
-                html += '<p><strong>🔔 重要提醒：</strong></p><ul>';
-                importantMsgs.forEach(m => {
-                    const sender = m.sender.split('(')[0];
-                    let text = m.text.replace(/@全体成员\s*/g, '').replace(/\[表情\s*\]/g, '').trim();
-                    html += '<li><strong>' + sender + '</strong>：' + text + '</li>';
-                });
-                html += '</ul>';
-            }
-            
-            // 3. AI分类提炼
-            html += '<p><strong>📋 分类提炼：</strong></p><ul>';
-            
-            // 事件类
-            const eventMsgs = td.filter(m => m.text.includes('截止') || m.text.includes('考试'));
-            if (eventMsgs.length > 0) {
-                html += '<li><span class="tag tag-red">事件</span> <strong>截止/考试提醒</strong> — ';
-                const texts = eventMsgs.map(m => m.text.replace(/@全体成员\s*/g, '').replace(/\[表情\s*\]/g, '').trim());
-                html += texts.join('；');
-                html += '</li>';
-            }
-            
-            html += '<li><span class="tag tag-purple">日常</span> 暂无其他分类消息</li>';
-            html += '</ul>';
-            
-            // 4. 一句话总结
-            if (importantMsgs.length > 0) {
-                html += '<p><strong>💡 一句话总结：</strong>';
-                html += '军事理论网课今晚截止，16-20号期末考，潘林同学在群里提醒了大家。同学们注意时间节点！';
-                html += '</p>';
-            }
-            
-            html += '</div>';
-            return html;
-        }
+        // ===== 课表数据 =====
+        const timetable = [
+            { day: '周一（6.15）', slots: [
+                { period: '1-2节', course: '计算机系统基础 - 周翔', room: '西院3号实验楼106' },
+                { period: '5-6节', course: '面向对象程序设计方法 - 王国栋', room: '西院1教301' },
+                { period: '7-8节', course: '离散数学II - 周翔', room: '西院1教408' }
+            ]},
+            { day: '周二（6.16）', slots: [
+                { period: '1-2节', course: '大学英语读写译IV - 蒋轶群', room: '西院2号实验楼113' },
+                { period: '3-4节', course: '体育II [男] - 李林越', room: '金家岭东院田径场' },
+                { period: '5-6节', course: '面向对象程序设计方法 - 王国栋', room: '西院3号实验楼106' },
+                { period: '7-8节', course: 'C语言课程设计 - 赵毅', room: '东院1教206' }
+            ]},
+            { day: '周三（6.17）', slots: [
+                { period: '1-2节', course: '大学英语视听说IV - 蒋轶群', room: '西院2号实验楼104' },
+                { period: '1-2节', course: '中国近现代史纲要 - 赵阳', room: '西院1教307' },
+                { period: '3-4节', course: '高等数学I（下）- 邵崑', room: '西院2教109' },
+                { period: '7-8节', course: '中国近现代史纲要 - 赵阳', room: '西院1教307' }
+            ]},
+            { day: '周四（6.18）', slots: [
+                { period: '1-2节', course: '大学物理学III - 郑威', room: '西院1教102' },
+                { period: '3-4节', course: '线性代数I - 东春彦', room: '西院1教308' },
+                { period: '5-6节', course: '计算机系统基础 - 周翔', room: '西院2教202' },
+                { period: '7-8节', course: '高等数学I（下）- 邵崑', room: '西院2教103' }
+            ]},
+            { day: '周五（6.19）', slots: [
+                { period: '1-2节', course: '大学物理学III - 郑威', room: '西院1教307' },
+                { period: '5-6节', course: '高等数学I（下）- 邵崑', room: '西院2教109' },
+                { period: '11节', course: '创新创业基础 - 韩晓', room: '西院1教303' }
+            ]},
+            { day: '周六（6.20）', slots: [
+                { period: '全天', course: '无课程安排', room: '' }
+            ]},
+            { day: '周日（6.21）', slots: [
+                { period: '1-8节', course: '计算机创新实践 - 纪俊', room: '东院1教206' }
+            ]}
+        ];
 
+        // 节次对照
+        const periodMap = {
+            '1-2节': '1、2节 (08:00-09:50)',
+            '3-4节': '3、4节 (10:10-12:00)',
+            '5-6节': '5、6节 (14:00-15:50)',
+            '7-8节': '7、8节 (16:10-18:00)',
+            '9-10节': '9、10节 (18:30-20:20)',
+            '11节': '11节 (20:30-21:15)',
+            '1-8节': '1-8节 (08:00-18:00)'
+        };
+
+        // ===== 渲染 =====
         function buildCalendar() {
-            let html = buildAISummary();
+            // 待办事项（置顶）
+            const now = new Date();
+            now.setDate(now.getDate() + 1); // 明天 6.14
+            const todayStr = now.toISOString().slice(0,10);
             
-            html += '<div class="section-title" style="border-bottom-color:#c53030;">🔰 近期重点</div>';
-            html += '<div class="msg-item importance-high">' +
-                '<div><span class="msg-sender" style="color:#d97706;">📌 6月15日（今日）</span></div>' +
-                '<div class="msg-text">⚡ <strong>军事理论</strong>知到网课今晚截止<br>' +
-                '⚡ <strong>期末考试</strong>6月16日（明天）至6月20日<br>' +
-                '来源：潘林 @全体成员</div></div>';
+            let html = '<div class="section-title" style="border-bottom-color:#c53030;">⏰ 待办事项</div>';
+            html += '<div class="msg-item" style="border-left-color:#c53030;background:#fff5f5;">' +
+                '<div><span class="msg-sender" style="color:#c53030;">📌 6月14日 晚7:15-8:15</span></div>' +
+                '<div class="msg-text"><strong>活动改期·图文中心三楼学术报告厅</strong> — 卿卿 @全体成员</div></div>';
+            html += '<div class="msg-item" style="border-left-color:#d97706;background:#fffbe6;">' +
+                '<div><span class="msg-sender" style="color:#d97706;">📌 6月15日前</span></div>' +
+                '<div class="msg-text"><strong>知到（智慧树）军事理论课</strong> — 刷课截止6.15，考试截止6.20</div></div>';
+            html += '<br>';
             
-            html += '<div class="section-title">📅 群聊日历</div>';
-            html += '<table><tr><th style="width:120px;">日期</th><th>事件/学习</th><th>消息数</th></tr>';
-            
-            const calMap = {};
-            messages.forEach(m => {
-                const d = m.time.slice(0, 10);
-                if (!calMap[d]) calMap[d] = { events: 0, studies: 0, total: 0 };
-                calMap[d].total++;
-                if (m.type === 'study') calMap[d].studies++;
-                else calMap[d].events++;
+            // 活动日历
+            let items = messages.filter(m => m.type === 'event' || m.type === 'study');
+            let cal = [];
+            items.forEach(m => {
+                const dateStr = m.time.slice(0,10);
+                let label = m.text.replace(/<br>/g, ' ').replace(/@all|@全体成员/g,'').trim().slice(0, 40);
+                if (label.includes('军事理论') || label.includes('知到')) label = '军事理论刷课/考试（6.15截止刷课）';
+                if (label.includes('四级') || label.includes('准考证')) label = '四级准考证打印';
+                if (label.includes('学生证补办')) label = '学生证补办（已截止6.10）';
+                if (label.includes('大地彩绘')) label = '大地彩绘活动（5.16浮山海月广场）';
+                if (label.includes('AI智能体')) label = 'AI智能体创新大赛决赛';
+                if (label.includes('朗诵')) label = '五四朗诵比赛（5.14截止报名）';
+                if (label.includes('家乡')) label = '家乡主题摄影公益活动（5.13-5.22）';
+                if (label.includes('排球')) label = '校排球赛（5.28开赛）';
+                if (label.includes('健康跑')) label = '校园健康跑（5.23比赛）';
+                if (label.includes('绘画')) label = '绘画解压活动（5.21博知楼511）';
+                if (label.includes('学生会')) label = '学生会竞选（5.28截止报名）';
+                if (label.includes('艺术展演')) label = '大学生艺术展演选拔';
+                if (label.includes('进社区')) label = '进社区案例征集（5.31截止）';
+                if (label.includes('蒲公英')) label = '蒲公英人才计划（华为认证）';
+                if (label.includes('XCTF')) label = 'XCTF AI+安全选拔赛';
+                cal.push({ date: dateStr, label: label });
             });
-            
-            Object.keys(calMap).sort().forEach(d => {
-                const c = calMap[d];
-                const isSoon = d >= '2026-06-14' && d <= '2026-06-20';
-                const dateDisplay = d.slice(5);
-                html += '<tr' + (isSoon ? ' style="background:#fffbeb;font-weight:600;color:#d97706;"' : '') + '>' +
-                    '<td' + (isSoon ? ' style="font-weight:600;color:#d97706;"' : '') + '>' + dateDisplay + '</td>' +
-                    '<td>' + c.events + ' 个事件 / ' + c.studies + ' 个学习</td>' +
-                    '<td>' + c.total + ' 条</td></tr>';
+            cal.sort((a, b) => a.date.localeCompare(b.date));
+
+            html += '<div class="section-title">📅 活动日历</div>';
+            html += '<table><tr><th style="width:120px;">日期</th><th>活动/事项</th></tr>';
+            cal.forEach(c => {
+                const isSoon = c.date >= '2026-06-14' && c.date <= '2026-06-20';
+                html += '<tr' + (isSoon ? ' style="background:#fffbe6;"' : '') + '>' +
+                    '<td' + (isSoon ? ' style="font-weight:600;color:#d97706;"' : '') + '>' + c.date.slice(5) + '</td>' +
+                    '<td>' + c.label + '</td></tr>';
             });
             html += '</table>';
             return html;
         }
 
         function buildStudy() {
-            let html = buildAISummary();
-            html += '<div class="section-title">📚 学习计划</div>';
-            const items = messages.filter(m => m.type === 'study');
-            if (items.length === 0) {
-                html += '<p class="empty-tip">暂无学习计划</p>';
-            } else {
-                items.forEach(m => {
-                    html += '<div class="msg-item" style="border-left-color:#c53030;">' +
-                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time.slice(0, 16).replace('T', ' ') + '</span></div>' +
-                        '<div class="msg-text">' + (m.text || '').replace(/\\n/g, '<br>') + '</div></div>';
-                });
-            }
+            let items = messages.filter(m => m.type === 'study');
+            let html = '<div class="section-title">📚 学业通知</div>';
+            items.forEach(m => {
+                html += '<div class="msg-item" style="border-left-color:#c53030;">' +
+                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time + '</span></div>' +
+                    '<div class="msg-text">' + m.text.replace(/\n/g, '<br>') + '</div></div>';
+            });
             return html;
         }
 
         function buildEvents() {
-            let html = buildAISummary();
-            html += '<div class="section-title">🎪 群聊事件</div>';
-            const items = messages.filter(m => m.type === 'event' || !m.type);
+            let items = messages.filter(m => m.type === 'event' && m.time >= '2026-06-10');
+            let html = '<div class="section-title">🎪 活动进行中</div>';
             if (items.length === 0) {
-                html += '<p class="empty-tip">暂无事件</p>';
+                html += '<p class="empty-tip">暂无进行中的活动</p>';
             } else {
                 items.forEach(m => {
-                    const date = new Date(m.time);
-                    const today = new Date();
-                    const diffDays = Math.floor((today - date) / (1000*60*60*24));
-                    html += '<div class="msg-item"' + (diffDays <= 7 ? ' style="border-left-color:#d97706;background:#fffbeb;"' : '') + '>' +
-                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time.slice(0, 16).replace('T', ' ') + '</span>' +
-                        (diffDays <= 7 ? ' <span class="tag tag-orange">近期</span>' : '') +
-                        '</div><div class="msg-text">' + (m.text || '').replace(/\\n/g, '<br>') + '</div></div>';
+                    html += '<div class="msg-item" style="border-left-color:#6b3fa0;">' +
+                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time + '</span><span class="tag tag-green">进行中</span></div>' +
+                        '<div class="msg-text">' + m.text.replace(/\n/g, '<br>') + '</div></div>';
                 });
             }
             return html;
         }
 
-        function buildPastevents() {
-            let html = '<div class="section-title">🗋 过往群聊</div>';
-            html += '<p class="empty-tip">历史消息将随每日抓取自动累计归档。</p>';
+        function buildPastEvents() {
+            let items = messages.filter(m => m.type === 'event' && m.time < '2026-06-10');
+            let html = '<div class="section-title">📋 过往活动</div>';
+            if (items.length === 0) {
+                html += '<p class="empty-tip">暂无过往活动</p>';
+            } else {
+                items.forEach(m => {
+                    html += '<div class="msg-item" style="border-left-color:#888;">' +
+                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time + '</span><span class="tag">已结束</span></div>' +
+                        '<div class="msg-text">' + m.text.replace(/\n/g, '<br>') + '</div></div>';
+                });
+            }
+            return html;
+        }
+
+        function buildTimetable() {
+            let html = '<div class="section-title">🗓 本周课表（6.15 - 6.21）</div>';
+            
+            // 时间说明
+            html += '<div class="stat-row">';
+            html += '<div class="stat-card"><div class="num">' + timetable.length + '</div><div class="label">上课天数</div></div>';
+            const totalSlots = timetable.reduce((sum, d) => sum + d.slots.length, 0);
+            html += '<div class="stat-card"><div class="num">' + totalSlots + '</div><div class="label">课程节次</div></div>';
+            html += '</div>';
+            
+            // 节次说明
+            html += '<div class="sub-title">⏰ 节次说明</div>';
+            html += '<div style="font-size:12px;color:#888;margin-bottom:12px;line-height:1.6;">';
+            html += '1、2节(08:00-09:50) | 3、4节(10:10-12:00) | 5、6节(14:00-15:50)<br>';
+            html += '7、8节(16:10-18:00) | 9、10节(18:30-20:20) | 11节(20:30-21:15)';
+            html += '</div>';
+            
+            timetable.forEach(d => {
+                // 判断今天
+                const isToday = d.day.includes('6.16') || d.day.includes('6.17') || d.day.includes('6.14');
+                html += '<div class="section-title"' + (isToday ? ' style="border-bottom-color:#c53030;"' : '') + '>' + d.day + '</div>';
+                
+                d.slots.forEach(s => {
+                    const periodInfo = periodMap[s.period] || s.period;
+                    const isNow = false; // 可以改为根据当前时间判断
+                    html += '<div class="msg-item"' + (isNow ? ' style="border-left-color:#c53030;background:#fff5f5;"' : '') + '>' +
+                        '<div><span class="msg-sender">' + s.period + '</span><span class="msg-time">' + periodInfo + '</span></div>' +
+                        '<div class="msg-text"><strong>' + s.course + '</strong>' + (s.room ? ' @ ' + s.room : '') + '</div></div>';
+                });
+            });
             return html;
         }
 
         function buildRaw() {
             let html = '<div class="section-title">📜 原始消息</div>';
-            if (messages.length === 0) {
-                html += '<p class="empty-tip">暂无消息</p>';
-            } else {
-                const reversed = [...messages].reverse();
-                reversed.forEach(m => {
-                    html += '<div class="msg-item">' +
-                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time.slice(0, 16).replace('T', ' ') + '</span></div>' +
-                        '<div class="msg-text">' + (m.text || '').replace(/\\n/g, '<br>') + '</div></div>';
-                });
-            }
+            messages.forEach(m => {
+                var tagClass = m.type === 'study' ? 'tag-red' : 'tag-purple';
+                var tagText = m.type === 'study' ? '学业' : '活动';
+                html += '<div class="msg-item">' +
+                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time + '</span><span class="tag ' + tagClass + '">' + tagText + '</span></div>' +
+                    '<div class="msg-text">' + m.text.replace(/\n/g, '<br>') + '</div></div>';
+            });
             return html;
         }
 
+        // ===== 标签切换 =====
         function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
             document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
-            const content = document.getElementById('summaryContent');
+            var content = document.getElementById('summaryContent');
             switch(tab) {
                 case 'calendar': content.innerHTML = buildCalendar(); break;
                 case 'study': content.innerHTML = buildStudy(); break;
                 case 'events': content.innerHTML = buildEvents(); break;
-                case 'pastevents': content.innerHTML = buildPastevents(); break;
+                case 'pastevents': content.innerHTML = buildPastEvents(); break;
+                case 'timetable': content.innerHTML = buildTimetable(); break;
                 case 'raw': content.innerHTML = buildRaw(); break;
             }
         }
 
-        // 默认显示日历
-        switchTab('calendar');
+        window.addEventListener('load', function() { switchTab('calendar'); });
     </script>
 </body>
 </html>
+
