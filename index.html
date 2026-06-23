@@ -54,11 +54,66 @@
             <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎪 群聊事件中</button>
             <button class="tab-btn" data-tab="pastevents" onclick="switchTab('pastevents')">🗋 过往群聊</button>
             <button class="tab-btn" data-tab="raw" onclick="switchTab('raw')">📜 原始群聊</button>
+            <button class="tab-btn" data-tab="ai" onclick="switchTab('ai')">🤖 AI 分析</button>
         </div>
         <div class="summary-content" id="summaryContent">
             <p class="empty-tip">加载中...</p>
         </div>
     </div>
+
+<div id="analysisSection" style="display:none;">
+  <div class="section-title">🤖 AI 智能分析 · 今日汇总</div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="num">0</div><div class="label">今日消息</div></div>
+    <div class="stat-card"><div class="num">18</div><div class="label">累计消息</div></div>
+    <div class="stat-card"><div class="num">6/23</div><div class="label">日期</div></div>
+  </div>
+
+  <div class="sub-title">📋 今日概况</div>
+  <p>今日（6月23日）群内无新消息记录。NapCat QQ 机器人于 21:54 启动运行，未捕获到白天的群聊数据，因此本次汇总无当日新增内容。</p>
+
+  <div class="section-title">📌 近期待办提醒（历史消息）</div>
+  <div class="msg-item" style="border-left-color:#d97706;background:#fffbeb;">
+    <div><span class="msg-sender" style="color:#d97706;">⏰ 军事理论课</span></div>
+    <div class="msg-text">知到/智慧树：6.15 刷课截止 → 6.20 考试截止 → 均已过期</div>
+  </div>
+  <div class="msg-item" style="border-left-color:#e53e3e;background:#fff5f5;">
+    <div><span class="msg-sender" style="color:#e53e3e;">📝 四六级考试</span></div>
+    <div class="msg-text">四级准考证已于6.12开放打印（cet-bm.neea.edu.cn），考试时间请自行确认</div>
+  </div>
+
+  <div class="section-title">📊 历史全局统计</div>
+  <table>
+    <tr><th>分类</th><th>数量</th><th>占比</th></tr>
+    <tr><td>🏫 校园活动/通知</td><td>13</td><td>72%</td></tr>
+    <tr><td>📖 学习/考试相关</td><td>5</td><td>28%</td></tr>
+    <tr><td>👤 发送者：啓（通知发布）</td><td>15</td><td>83%</td></tr>
+    <tr><td>👤 发送者：那你懂我意思了.</td><td>2</td><td>11%</td></tr>
+    <tr><td>👤 发送者：潘林</td><td>1</td><td>6%</td></tr>
+  </table>
+
+  <div class="section-title">📅 历史事件时间线</div>
+  <table>
+    <tr><th>日期</th><th>事件</th><th>状态</th></tr>
+    <tr><td>5.12-5.16</td><td>大地彩绘、AI智能体大赛、朗诵比赛</td><td><span class="tag tag-red">已过期</span></td></tr>
+    <tr><td>5.19-5.28</td><td>排球赛、健康跑、绘画解压活动、学生会竞选</td><td><span class="tag tag-red">已过期</span></td></tr>
+    <tr><td>5.26-5.31</td><td>艺术展演选拔、实践案例征集</td><td><span class="tag tag-red">已过期</span></td></tr>
+    <tr><td>6.10</td><td>军事理论刷课/考试提醒、华为蒲公英认证</td><td><span class="tag tag-red">已过期</span></td></tr>
+    <tr><td>6.12</td><td>四级准考证打印通知</td><td><span class="tag tag-red">已过期</span></td></tr>
+    <tr><td>6.13</td><td>XCTF安全赛报名、学生会公示、学生证补办</td><td><span class="tag tag-red">已过期</span></td></tr>
+    <tr><td>6.15</td><td>潘林提醒：军事理论网课截止，6.20考试</td><td><span class="tag tag-red">已过期</span></td></tr>
+  </table>
+
+  <div class="section-title">💡 改进建议</div>
+  <p>当前 NapCat 仅在 OpenClaw 运行期间抓取消息，如机器人离线则漏抓。如需实时记录：</p>
+  <ul style="margin:8px 0 0 20px;color:#555;line-height:1.8;">
+    <li>将 NapCat 设为开机自启，确保持续在线</li>
+    <li>或通过 QQ 官方 API 定期拉取群消息备份</li>
+  </ul>
+
+  <p style="margin-top:16px;color:#999;font-size:12px;text-align:center;">🤖 AI 自动分析 · 生成时间 2026-06-23 22:10</p>
+</div>
+
     <script>
         // ====== 群消息数据 ======
         const messages = [{"time":"2026-05-12 14:20","sender":"啓","text":"📣 @all \"青心向国 大梦启航\"大地彩绘活动即将举办...活动通过掌印彩绘、创意白T绘制等形式完成主题创作。参与可获证书+第二课堂学时+综测。\n时间：5.16 上午9点\n地点：浮山海月广场","type":"event"},{"time":"2026-05-12 14:21","sender":"啓","text":"青岛大学首届 AI 智能体创新大赛（决赛）通知。","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"https://mp.weixin.qq.com/s/U1gZCrsKM3a7nW_RAE1J2A","type":"event"},{"time":"2026-05-14 09:07","sender":"啓","text":"\"情系故土，礼赞家乡\"主题公益活动\n时间：5.13-5.22\n扫码上传摄影作品（家乡风光/人文/民俗），获综测+学时+公益证书。一等奖可获国家级媒体专访。\n活动QQ群：1078753135","type":"event"},{"time":"2026-05-16 11:33","sender":"啓","text":"2026年校排球赛队员召集令\n男女混合制（至少2位女同学）\n5.28开赛，5.19报名截止\n浮山西院排球场","type":"event"},{"time":"2026-05-16 18:37","sender":"啓","text":"2026校园健康跑报名通知\n5.23比赛，5.19下午4点截止\n男女各限15人，参赛记第二课堂","type":"event"},{"time":"2026-05-19 12:13","sender":"啓","text":"「妙笔纾心，向阳逐光」绘画解压活动\n时间：5.21下午1:40-3:00\n地点：博知楼511\n仅10个名额，扫码报名","type":"event"},{"time":"2026-05-23 19:26","sender":"啓","text":"公开竞选2026届学生会主席团及各中心负责人\n主席团限2024级，中心负责人2024/2025均可\n报名截止5.28 12:00\n材料交至博知楼316","type":"event"},{"time":"2026-05-26 12:36","sender":"啓","text":"山东省第八届大学生艺术展演选拔\n报名材料发至邮箱430078583@qq.com","type":"event"},{"time":"2026-05-28 18:05","sender":"啓","text":"\"大学生进社区\"实践案例征集\n5.31中午12点截止\n发至邮箱 qdu_jsjzyzxh@126.com","type":"event"},{"time":"2026-06-10 10:55","sender":"那你懂我意思了.","text":"⏰ 知到（智慧树）军事理论课 6.15截止刷课，6.20截止考试！大家抓紧","type":"study"},{"time":"2026-06-10 14:36","sender":"啓","text":"华为×济南博赛「蒲公英人才计划」\n496元考7张华为认证证书（含HCIA-AI、鸿蒙等）\n全程线上，名额有限","type":"event"},{"time":"2026-06-12 12:48","sender":"那你懂我意思了.","text":"📢 四级准考证可以下载打印啦！\nhttps://cet-bm.neea.edu.cn/","type":"study"},{"time":"2026-06-13 00:26","sender":"啓","text":"XCTF 百城千赛·高校AI+安全选拔赛-青岛大学站\n使用组织码 Z7CBU3JY54AW 在 攻防世界 报名\nQQ群：784697982","type":"event"},{"time":"2026-06-13 00:33","sender":"啓","text":"学生会换届竞选结果公示","type":"event"},{"time":"2026-06-13 00:34","sender":"啓","text":"📢 2026春季第二次学生证补办\n6.10下午3点截止！\n费用：学生证5元/优惠卡7元/都办12元\n交至博知楼316","type":"study"},{"sender":"潘林","time":"2026-06-15 22:05:32","text":"@全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈 [表情 ]","type":"event"}];
@@ -141,6 +196,10 @@
             // 按事件分组
             html += '<p class="empty-tip">历史消息自动归档中...</p>';
             return html;
+        }
+
+        function buildAi() {
+            return document.getElementById('analysisSection').innerHTML;
         }
 
         function buildRaw() {
