@@ -49,7 +49,8 @@
     </div>
     <div class="summary-section">
         <div class="summary-tabs">
-            <button class="tab-btn active" data-tab="calendar" onclick="switchTab('calendar')">📒 群聊日历</button>
+                        <button class="tab-btn active" data-tab="ai" onclick="switchTab('ai')">🤖 AI分析</button>
+            <button class="tab-btn" data-tab="calendar" onclick="switchTab('calendar')">📅 群聊日历</button>
             <button class="tab-btn" data-tab="study" onclick="switchTab('study')">📚 学习计划</button>
             <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎪 群聊事件中</button>
             <button class="tab-btn" data-tab="pastevents" onclick="switchTab('pastevents')">🗋 过往群聊</button>
@@ -154,6 +155,50 @@
             return html;
         }
 
+        
+        // ====== AI 分析总结数据 ======
+        function buildAIAnalysis() {
+            let html = '<div class="section-title" style="border-bottom-color:#1C64F2;">🤖 AI 智能分析总结</div>';
+            html += '<div class="stat-row">';
+            html += '<div class="stat-card"><div class="num">18</div><div class="label">消息总数</div></div>';
+            html += '<div class="stat-card"><div class="num">15</div><div class="label">活动通知</div></div>';
+            html += '<div class="stat-card"><div class="num">3</div><div class="label">学习计划</div></div>';
+            html += '<div class="stat-card"><div class="num">3</div><div class="label">发布者</div></div>';
+            html += '</div>';
+            
+            html += '<p style="background:#f0f7ff;padding:12px 16px;border-radius:8px;color:#1a56db;font-size:14px;line-height:1.8;">截至6月26日，25计科03班群聊共记录 18 条有效通知消息，由 啓、那你懂我意思了.、潘林 等发布。</p>';
+
+            html += '<div class="sub-title">🎨 文体活动</div><ul style="margin:4px 0 12px 20px;">';
+            html += '<li style="margin:4px 0;color:#444;">大地彩绘活动（5.16）- 掌印彩绘+白T绘制，证书+学时+综测</li>';
+            html += '<li style="margin:4px 0;color:#444;">五四朗诵比赛（5.14截止报名）</li>';
+            html += '<li style="margin:4px 0;color:#444;">「妙笔纾心」绘画解压活动（5.21）- 仅10名额</li>';
+            html += '<li style="margin:4px 0;color:#444;">2026校排球赛（5.28开赛）/ 校园健康跑（5.23）</li>';
+            html += '<li style="margin:4px 0;color:#444;">山东省大学生艺术展演选拔</li></ul>';
+
+            html += '<div class="sub-title">📚 学业通知</div><ul style="margin:4px 0 12px 20px;">';
+            html += '<li style="margin:4px 0;color:#444;">军事理论知到网课：6.15截止刷课，6.20截止考试（潘林@全体提醒）</li>';
+            html += '<li style="margin:4px 0;color:#444;">四级准考证已开放打印（6.12通知）</li>';
+            html += '<li style="margin:4px 0;color:#444;">2026春季第二次学生证补办（6.10截止）</li></ul>';
+
+            html += '<div class="sub-title">🏆 竞赛/实践</div><ul style="margin:4px 0 12px 20px;">';
+            html += '<li style="margin:4px 0;color:#444;">AI智能体创新大赛决赛 / XCTF AI+安全选拔赛-青岛大学站</li>';
+            html += '<li style="margin:4px 0;color:#444;">华为×博赛「蒲公英人才计划」- 496元考7张华为认证</li>';
+            html += '<li style="margin:4px 0;color:#444;">「大学生进社区」实践案例征集（5.31截止）</li></ul>';
+
+            html += '<div class="sub-title">📋 组织事务</div><ul style="margin:4px 0 12px 20px;">';
+            html += '<li style="margin:4px 0;color:#444;">学生会换届竞选结果公示（6.13）</li>';
+            html += '<li style="margin:4px 0;color:#444;">2026届学生会主席团及负责人公开竞选（5.28截止）</li>';
+            html += '<li style="margin:4px 0;color:#444;">「情系故土」摄影公益活动（5.13-5.22）</li></ul>';
+            
+            html += '<div class="section-title" style="border-bottom-color:#c53030;margin-top:24px;">⚠️ 近期关注</div>';
+            html += '<div class="msg-item" style="border-left-color:#c53030;background:#fff5f5;"><div class="msg-text"><strong>当前注意事项：</strong>军事理论期末考试（6.20前）已过截止日期；四级考试在6月中旬举行；学生证补办已结束。NapCat日志最后更新于6月20日，近一周无新消息记录。</div></div>';
+            
+            html += '<div class="section-title" style="border-bottom-color:#059669;margin-top:24px;">📊 数据统计</div>';
+            html += '<p style="background:#f0fdf4;padding:12px 16px;border-radius:8px;color:#065f46;font-size:13px;line-height:1.8;">📊 共 ' + total + ' 条消息（活动通知 ' + events.length + ' 条，学习计划 ' + studies.length + ' 条），时间跨度 5月12日 ~ 6月15日，由 ' + senders.join('、') + ' 发布。</p>';
+            
+            return html;
+        }
+
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
@@ -163,12 +208,13 @@
                 case 'study': content.innerHTML = buildStudy(); break;
                 case 'events': content.innerHTML = buildEvents(); break;
                 case 'pastevents': content.innerHTML = buildPastevents(); break;
+                case 'ai': content.innerHTML = buildAIAnalysis(); break;
                 case 'raw': content.innerHTML = buildRaw(); break;
             }
         }
 
-        // 默认显示日历
-        switchTab('calendar');
+        // 默认显示AI分析
+        switchTab('ai');
     </script>
 </body>
 </html>
