@@ -1,220 +1,580 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>25计科03班 · 群消息汇总</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f7fa; height: 100vh; display: flex; flex-direction: column; }
-        .header { background: #fff; padding: 18px 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        .header h1 { color: #1a1a2e; font-size: 22px; margin: 0; }
-        .header-sub { color: #888; font-size: 13px; font-weight: normal; margin-left: 10px; }
-        .summary-section { flex: 1; padding: 20px 30px; overflow: hidden; display: flex; flex-direction: column; }
-        .summary-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-shrink: 0; }
-        .tab-btn { padding: 8px 20px; border: 1px solid #ddd; background: #fff; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
-        .tab-btn.active { background: #1C64F2; color: #fff; border-color: #1C64F2; }
-        .tab-btn:hover:not(.active) { background: #f0f4ff; }
-        .summary-content { flex: 1; overflow-y: auto; background: #fff; border-radius: 10px; border: 1px solid #e8ecf0; padding: 24px 28px; font-size: 14px; line-height: 1.7; }
-        .section-title { font-size: 18px; font-weight: 600; color: #1a1a2e; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #1C64F2; }
-        .section-title:first-child { margin-top: 0; }
-        .sub-title { font-size: 15px; font-weight: 600; color: #2d3748; margin: 14px 0 6px; }
-        p { margin: 4px 0; color: #333; }
-        .msg-item { padding: 10px 14px; margin: 6px 0; background: #f8fafc; border-left: 3px solid #1C64F2; border-radius: 4px; }
-        .msg-sender { font-weight: 600; color: #1C64F2; font-size: 13px; }
-        .msg-time { color: #888; font-size: 12px; margin-left: 8px; }
-        .msg-text { margin-top: 4px; white-space: pre-wrap; word-break: break-word; }
-        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin: 2px 4px 2px 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background-color: #fff;
+            padding: 18px 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .header h1 {
+            color: #1a1a2e;
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .header-sub {
+            color: #888;
+            font-size: 13px;
+            font-weight: normal;
+            margin-left: 10px;
+        }
+        
+        .summary-section {
+            flex: 1;
+            padding: 20px 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+
+        .tab-btn.active {
+            background: #1C64F2;
+            color: #fff;
+            border-color: #1C64F2;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #f0f4ff;
+        }
+
+        .summary-content {
+            flex: 1;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #e8ecf0;
+            padding: 24px 28px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin: 20px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #1C64F2;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .sub-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 14px 0 6px;
+        }
+
+        p {
+            margin: 4px 0;
+            color: #333;
+        }
+
+        .msg-item {
+            padding: 10px 14px;
+            margin: 6px 0;
+            background: #f8fafc;
+            border-left: 3px solid #1C64F2;
+            border-radius: 4px;
+        }
+
+        .msg-sender {
+            font-weight: 600;
+            color: #1C64F2;
+            font-size: 13px;
+        }
+
+        .msg-time {
+            color: #888;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .msg-text {
+            margin-top: 4px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin: 2px 4px 2px 0;
+        }
+
         .tag-red { background: #fde8e8; color: #c53030; }
         .tag-purple { background: #f0e8ff; color: #6b3fa0; }
         .tag-green { background: #e6f7ed; color: #0f7b3e; }
-        table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
-        th, td { border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; }
-        th { background: #f0f4ff; font-weight: 600; }
-        .highlight { background: #fffbe6; padding: 1px 4px; border-radius: 2px; font-weight: 600; }
-        .stat-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0; }
-        .stat-card { background: #f8fafc; border-radius: 8px; padding: 12px 18px; min-width: 120px; text-align: center; }
-        .stat-card .num { font-size: 24px; font-weight: 700; color: #1C64F2; }
-        .stat-card .label { font-size: 12px; color: #888; margin-top: 2px; }
-        .empty-tip { color: #999; text-align: center; padding: 40px 0; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #f0f4ff;
+            font-weight: 600;
+        }
+
+        .highlight {
+            background: #fffbe6;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px 18px;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .stat-card .num {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1C64F2;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .empty-tip {
+            color: #999;
+            text-align: center;
+            padding: 40px 0;
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+        /* ===== 手机端适配 ===== */
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .header h1 { font-size: 17px; }
+            .header-sub { font-size: 11px; margin-left: 6px; }
+            .summary-section { padding: 12px 12px; }
+            .summary-tabs { gap: 4px; margin-bottom: 10px; }
+            .tab-btn { padding: 5px 8px; font-size: 11px; }
+            .summary-content { padding: 14px 16px; font-size: 13px; }
+            .section-title { font-size: 15px; }
+            .msg-item { padding: 8px 10px; }
+            .msg-sender { font-size: 12px; }
+            .msg-time { font-size: 11px; margin-left: 4px; }
+            .msg-text { font-size: 12px; }
+            table { font-size: 11px; }
+            th, td { padding: 5px 8px; }
+            .stat-card { padding: 8px 12px; min-width: 80px; }
+            .stat-card .num { font-size: 18px; }
+            .sub-title { font-size: 13px; }
+        }
+
+        @media (max-width: 480px) {
+            .tab-btn { padding: 4px 6px; font-size: 10px; gap: 2px; }
+            .summary-tabs { gap: 3px; }
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>25计科03班 · 群消息汇总 <span class="header-sub">05/12 ~ 今日</span></h1>
+        <h1>25计科03班 · 群消息汇总 <span class="header-sub">05/12 ~ 06/26</span></h1>
     </div>
+
     <div class="summary-section">
         <div class="summary-tabs">
-                        <button class="tab-btn active" data-tab="ai" onclick="switchTab('ai')">🤖 AI分析</button>
-            <button class="tab-btn" data-tab="calendar" onclick="switchTab('calendar')">📅 群聊日历</button>
-            <button class="tab-btn" data-tab="study" onclick="switchTab('study')">📚 学习计划</button>
-            <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎪 群聊事件中</button>
-            <button class="tab-btn" data-tab="pastevents" onclick="switchTab('pastevents')">🗋 过往群聊</button>
-            <button class="tab-btn" data-tab="raw" onclick="switchTab('raw')">📜 原始群聊</button>
+            <button class="tab-btn active" data-tab="ai" onclick="switchTab('ai')">🤖 AI分析</button>
+            <button class="tab-btn" data-tab="calendar" onclick="switchTab('calendar')">📅 活动日历</button>
+            <button class="tab-btn" data-tab="timetable" onclick="switchTab('timetable')">🗓 本周课表</button>
+            <button class="tab-btn" data-tab="study" onclick="switchTab('study')">📚 学业通知</button>
+            <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎪 活动进行中</button>
+            <button class="tab-btn" data-tab="pastevents" onclick="switchTab('pastevents')">📋 过往活动</button>
+            <button class="tab-btn" data-tab="raw" onclick="switchTab('raw')">📜 原始消息</button>
         </div>
         <div class="summary-content" id="summaryContent">
             <p class="empty-tip">加载中...</p>
         </div>
     </div>
+
     <script>
-        // ====== 群消息数据 ======
-        const messages = [{"time":"2026-05-12 14:20","sender":"啓","text":"📣 @all \"青心向国 大梦启航\"大地彩绘活动即将举办...活动通过掌印彩绘、创意白T绘制等形式完成主题创作。参与可获证书+第二课堂学时+综测。\n时间：5.16 上午9点\n地点：浮山海月广场","type":"event"},{"time":"2026-05-12 14:21","sender":"啓","text":"青岛大学首届 AI 智能体创新大赛（决赛）通知。","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"https://mp.weixin.qq.com/s/U1gZCrsKM3a7nW_RAE1J2A","type":"event"},{"time":"2026-05-14 09:07","sender":"啓","text":"\"情系故土，礼赞家乡\"主题公益活动\n时间：5.13-5.22\n扫码上传摄影作品（家乡风光/人文/民俗），获综测+学时+公益证书。一等奖可获国家级媒体专访。\n活动QQ群：1078753135","type":"event"},{"time":"2026-05-16 11:33","sender":"啓","text":"2026年校排球赛队员召集令\n男女混合制（至少2位女同学）\n5.28开赛，5.19报名截止\n浮山西院排球场","type":"event"},{"time":"2026-05-16 18:37","sender":"啓","text":"2026校园健康跑报名通知\n5.23比赛，5.19下午4点截止\n男女各限15人，参赛记第二课堂","type":"event"},{"time":"2026-05-19 12:13","sender":"啓","text":"「妙笔纾心，向阳逐光」绘画解压活动\n时间：5.21下午1:40-3:00\n地点：博知楼511\n仅10个名额，扫码报名","type":"event"},{"time":"2026-05-23 19:26","sender":"啓","text":"公开竞选2026届学生会主席团及各中心负责人\n主席团限2024级，中心负责人2024/2025均可\n报名截止5.28 12:00\n材料交至博知楼316","type":"event"},{"time":"2026-05-26 12:36","sender":"啓","text":"山东省第八届大学生艺术展演选拔\n报名材料发至邮箱430078583@qq.com","type":"event"},{"time":"2026-05-28 18:05","sender":"啓","text":"\"大学生进社区\"实践案例征集\n5.31中午12点截止\n发至邮箱 qdu_jsjzyzxh@126.com","type":"event"},{"time":"2026-06-10 10:55","sender":"那你懂我意思了.","text":"⏰ 知到（智慧树）军事理论课 6.15截止刷课，6.20截止考试！大家抓紧","type":"study"},{"time":"2026-06-10 14:36","sender":"啓","text":"华为×济南博赛「蒲公英人才计划」\n496元考7张华为认证证书（含HCIA-AI、鸿蒙等）\n全程线上，名额有限","type":"event"},{"time":"2026-06-12 12:48","sender":"那你懂我意思了.","text":"📢 四级准考证可以下载打印啦！\nhttps://cet-bm.neea.edu.cn/","type":"study"},{"time":"2026-06-13 00:26","sender":"啓","text":"XCTF 百城千赛·高校AI+安全选拔赛-青岛大学站\n使用组织码 Z7CBU3JY54AW 在 攻防世界 报名\nQQ群：784697982","type":"event"},{"time":"2026-06-13 00:33","sender":"啓","text":"学生会换届竞选结果公示","type":"event"},{"time":"2026-06-13 00:34","sender":"啓","text":"📢 2026春季第二次学生证补办\n6.10下午3点截止！\n费用：学生证5元/优惠卡7元/都办12元\n交至博知楼316","type":"study"},{"sender":"潘林","time":"2026-06-15 22:05:32","text":"@全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈 [表情 ]","type":"event"}];
-        
+        // ===== 群消息数据 =====
+        const messages = [{"time":"2026-05-12 14:20","sender":"啓","text":"📣 @all \"青心向国 大梦启航\"大地彩绘活动即将举办...活动通过掌印彩绘、创意白T绘制等形式完成主题创作。参与可获证书+第二课堂学时+综测。\n时间：5.16 上午9点\n地点：浮山海月广场","type":"event"},{"time":"2026-05-12 14:21","sender":"啓","text":"青岛大学首届 AI 智能体创新大赛（决赛）通知。","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"https://mp.weixin.qq.com/s/U1gZCrsKM3a7nW_RAE1J2A","type":"event"},{"time":"2026-05-14 09:07","sender":"啓","text":"\"情系故土，礼赞家乡\"主题公益活动\n时间：5.13-5.22\n扫码上传摄影作品（家乡风光/人文/民俗），获综测+学时+公益证书。一等奖可获国家级媒体专访。\n活动QQ群：1078753135","type":"event"},{"time":"2026-05-16 11:33","sender":"啓","text":"2026年校排球赛队员召集令\n男女混合制（至少2位女同学）\n5.28开赛，5.19报名截止\n浮山西院排球场","type":"event"},{"time":"2026-05-16 18:37","sender":"啓","text":"2026校园健康跑报名通知\n5.23比赛，5.19下午4点截止\n男女各限15人，参赛记第二课堂","type":"event"},{"time":"2026-05-19 12:13","sender":"啓","text":"「妙笔纾心，向阳逐光」绘画解压活动\n时间：5.21下午1:40-3:00\n地点：博知楼511\n仅10个名额，扫码报名","type":"event"},{"time":"2026-05-23 19:26","sender":"啓","text":"公开竞选2026届学生会主席团及各中心负责人\n主席团限2024级，中心负责人2024/2025均可\n报名截止5.28 12:00\n材料交至博知楼316","type":"event"},{"time":"2026-05-26 12:36","sender":"啓","text":"山东省第八届大学生艺术展演选拔\n报名材料发至邮箱430078583@qq.com","type":"event"},{"time":"2026-05-28 18:05","sender":"啓","text":"\"大学生进社区\"实践案例征集\n5.31中午12点截止\n发至邮箱 qdu_jsjzyzxh@126.com","type":"event"},{"time":"2026-06-10 10:55","sender":"那你懂我意思了.","text":"⏰ 知到（智慧树）军事理论课 6.15截止刷课，6.20截止考试！大家抓紧","type":"study"},{"time":"2026-06-10 14:36","sender":"啓","text":"华为×济南博赛「蒲公英人才计划」\n496元考7张华为认证证书（含HCIA-AI、鸿蒙等）\n全程线上，名额有限","type":"event"},{"time":"2026-06-12 12:48","sender":"那你懂我意思了.","text":"📢 四级准考证可以下载打印啦！\nhttps://cet-bm.neea.edu.cn/","type":"study"},{"time":"2026-06-13 00:26","sender":"啓","text":"XCTF 百城千赛·高校AI+安全选拔赛-青岛大学站\n使用组织码 Z7CBU3JY54AW 在 攻防世界 报名\nQQ群：784697982","type":"event"},{"time":"2026-06-13 00:33","sender":"啓","text":"学生会换届竞选结果公示","type":"event"},{"time":"2026-06-13 00:34","sender":"啓","text":"📢 2026春季第二次学生证补办\n6.10下午3点截止！\n费用：学生证5元/优惠卡7元/都办12元\n交至博知楼316","type":"study"},{"sender":"潘林","time":"2026-06-15 22:05:32","text":"@全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈","type":"study"}];
+
         messages.sort((a, b) => new Date(a.time) - new Date(b.time));
 
-        // ====== 渲染函数 ======
-        function buildCalendar() {
-            const events = messages.filter(m => m.type === 'event' || !m.type);
-            const studies = messages.filter(m => m.type === 'study');
-            
-            // 近期高亮
-            let html = '<div class="section-title" style="border-bottom-color:#c53030;">🔰 近期重点</div>';
-            html += '<div class="msg-item" style="border-left-color:#c53030;background:#fff5f5;">' +
-                '<div><span class="msg-sender" style="color:#c53030;">📌 6月11日-15日 晚间7:15-8:15</span></div>' +
-                '<div class="msg-text"><strong>群聊机器人·群消息汇总</strong> — 每日 AI 自动抓取总结</div></div>';
-            
-            html += '<div class="section-title">📅 群聊日历</div>';
-            html += '<table><tr><th style="width:120px;">日期</th><th>事件/学习</th><th>消息数</th></tr>';
-            
-            const calMap = {};
-            messages.forEach(m => {
-                const d = m.time.slice(0, 10);
-                if (!calMap[d]) calMap[d] = { events: 0, studies: 0, total: 0 };
-                calMap[d].total++;
-                if (m.type === 'study') calMap[d].studies++;
-                else calMap[d].events++;
+        // ===== 课表数据 =====
+        const timetable = [
+            { day: '周一（6.15）', slots: [
+                { period: '1-2节', course: '计算机系统基础 - 周翔', room: '西院3号实验楼106' },
+                { period: '5-6节', course: '面向对象程序设计方法 - 王国栋', room: '西院1教301' },
+                { period: '7-8节', course: '离散数学II - 周翔', room: '西院1教408' }
+            ]},
+            { day: '周二（6.16）', slots: [
+                { period: '1-2节', course: '大学英语读写译IV - 蒋轶群', room: '西院2号实验楼113' },
+                { period: '3-4节', course: '体育II [男] - 李林越', room: '金家岭东院田径场' },
+                { period: '5-6节', course: '面向对象程序设计方法 - 王国栋', room: '西院3号实验楼106' },
+                { period: '7-8节', course: 'C语言课程设计 - 赵毅', room: '东院1教206' }
+            ]},
+            { day: '周三（6.17）', slots: [
+                { period: '1-2节', course: '大学英语视听说IV - 蒋轶群', room: '西院2号实验楼104' },
+                { period: '1-2节', course: '中国近现代史纲要 - 赵阳', room: '西院1教307' },
+                { period: '3-4节', course: '高等数学I（下）- 邵崑', room: '西院2教109' },
+                { period: '7-8节', course: '中国近现代史纲要 - 赵阳', room: '西院1教307' }
+            ]},
+            { day: '周四（6.18）', slots: [
+                { period: '1-2节', course: '大学物理学III - 郑威', room: '西院1教102' },
+                { period: '3-4节', course: '线性代数I - 东春彦', room: '西院1教308' },
+                { period: '5-6节', course: '计算机系统基础 - 周翔', room: '西院2教202' },
+                { period: '7-8节', course: '高等数学I（下）- 邵崑', room: '西院2教103' }
+            ]},
+            { day: '周五（6.19）', slots: [
+                { period: '1-2节', course: '大学物理学III - 郑威', room: '西院1教307' },
+                { period: '5-6节', course: '高等数学I（下）- 邵崑', room: '西院2教109' },
+                { period: '11节', course: '创新创业基础 - 韩晓', room: '西院1教303' }
+            ]},
+            { day: '周六（6.20）', slots: [
+                { period: '全天', course: '无课程安排', room: '' }
+            ]},
+            { day: '周日（6.21）', slots: [
+                { period: '1-8节', course: '计算机创新实践 - 纪俊', room: '东院1教206' }
+            ]}
+        ];
+
+        // 节次对照
+        const periodMap = {
+            '1-2节': '1、2节 (08:00-09:50)',
+            '3-4节': '3、4节 (10:10-12:00)',
+            '5-6节': '5、6节 (14:00-15:50)',
+            '7-8节': '7、8节 (16:10-18:00)',
+            '9-10节': '9、10节 (18:30-20:20)',
+            '11节': '11节 (20:30-21:15)',
+            '1-8节': '1-8节 (08:00-18:00)'
+        };
+
+        // ===== 渲染 =====
+        function buildAI() {
+            const total = messages.length;
+            const eventCount = messages.filter(m => m.type === 'event' || !m.type).length;
+            const studyCount = messages.filter(m => m.type === 'study').length;
+            const sender啓 = messages.filter(m => m.sender === '啓').length;
+            const senderNid = messages.filter(m => m.sender === '那你懂我意思了.').length;
+            const senderPan = messages.filter(m => m.sender === '潘林').length;
+
+            let html = '';
+
+            html += '<div class="section-title">🤖 AI 智能分析 · 截至 2026-06-26</div>';
+            html += '<div class="stat-row">';
+            html += '<div class="stat-card"><div class="num">' + total + '</div><div class="label">累计消息</div></div>';
+            html += '<div class="stat-card"><div class="num">' + eventCount + '</div><div class="label">事件通知</div></div>';
+            html += '<div class="stat-card"><div class="num">' + studyCount + '</div><div class="label">学习提醒</div></div>';
+            html += '<div class="stat-card"><div class="num">3</div><div class="label">发言成员</div></div>';
+            html += '<div class="stat-card"><div class="num">44天</div><div class="label">跨度时间</div></div>';
+            html += '</div>';
+
+            html += '<div class="section-title">📋 今日概况（6月26日）</div>';
+            html += '<div class="info-box warn">';
+            html += '<p><strong>今日无新消息记录。</strong> NapCat QQ 机器人在近期日志中未捕获到 6月26日的群聊数据。';
+            html += ' 目前累计已收录 <strong>' + total + '</strong> 条消息，时间跨度 5月12日 至 6月15日。</p>';
+            html += '<p style="margin-top:6px;">💡 期末周已至，军事理论考试已于 6.20 结束，四级考试安排在 6月中旬。建议同学们关注官方考试通知。</p>';
+            html += '</div>';
+
+            html += '<div class="section-title">📊 阶段总结 · 5月中旬 ~ 6月中旬</div>';
+
+            html += '<div class="sub-title">📌 消息来源分布</div>';
+            html += '<table>';
+            html += '<tr><th>发送者</th><th>角色</th><th>消息数</th><th>占比</th></tr>';
+            html += '<tr><td>啓</td><td>班委/活动通知发布者</td><td>' + sender啓 + '</td><td>' + Math.round(sender啓/total*100) + '%</td></tr>';
+            html += '<tr><td>那你懂我意思了.</td><td>学习提醒</td><td>' + senderNid + '</td><td>' + Math.round(senderNid/total*100) + '%</td></tr>';
+            html += '<tr><td>潘林</td><td>班委/重要通知</td><td>' + senderPan + '</td><td>' + Math.round(senderPan/total*100) + '%</td></tr>';
+            html += '</table>';
+
+            html += '<div class="sub-title">📌 按消息类型</div>';
+            html += '<table>';
+            html += '<tr><th>分类</th><th>数量</th><th>占比</th><th>说明</th></tr>';
+            html += '<tr><td>🏫 校园活动/通知</td><td>' + eventCount + '</td><td>' + Math.round(eventCount/total*100) + '%</td><td>彩绘、比赛、学生会、公益等</td></tr>';
+            html += '<tr><td>📖 学习/考试提醒</td><td>' + studyCount + '</td><td>' + Math.round(studyCount/total*100) + '%</td><td>军事理论、四级、学生证等</td></tr>';
+            html += '</table>';
+
+            html += '<div class="section-title">⏳ 重要事件时间线</div>';
+            html += '<div class="timeline">';
+            const timeline = [
+                { date: '5.12-5.16', title: '校园活动周', desc: '大地彩绘 · AI智能体大赛 · 五四朗诵比赛', status: 'past' },
+                { date: '5.14-5.22', title: '「情系故土」公益活动', desc: '摄影作品征集，获综测+学时', status: 'past' },
+                { date: '5.16-5.19', title: '体育比赛报名', desc: '校排球赛(5.28开赛) · 健康跑(5.23比赛)', status: 'past' },
+                { date: '5.21', title: '绘画解压活动', desc: '博知楼511，仅10个名额', status: 'past' },
+                { date: '5.23-5.28', title: '学生会换届竞选', desc: '主席团限2024级，报名截止5.28', status: 'past' },
+                { date: '5.26-5.31', title: '艺术展演 & 社区实践征集', desc: '山东省大艺展选拔 · 进社区案例征集', status: 'past' },
+                { date: '6.10', title: '📚 学习提醒密集期', desc: '军事理论课截止提醒 · 华为蒲公英认证(496元考7证)', status: 'past' },
+                { date: '6.12', title: '📚 四级准考证打印', desc: 'https://cet-bm.neea.edu.cn/', status: 'past' },
+                { date: '6.13', title: '🔐 XCTF安全赛 & 学生会公示', desc: '青岛大学站 · 组织码 Z7CBU3JY54AW', status: 'past' },
+                { date: '6.13', title: '📢 学生证补办截止', desc: '6.10已截止，费用5-12元', status: 'past' },
+                { date: '6.15-6.20', title: '🎯 军事理论考试', desc: '6.15刷课截止 → 6.20考试截止', status: 'past' },
+                { date: '6月中旬', title: '📝 大学英语四六级考试', desc: '具体时间请查看准考证', status: 'past' },
+            ];
+            timeline.forEach(t => {
+                html += '<div class="timeline-item ' + (t.status || '') + '">';
+                html += '<div style="font-size:12px;color:#888;">' + t.date + '</div>';
+                html += '<div style="font-weight:600;">' + t.title + '</div>';
+                html += '<div style="font-size:13px;color:#555;">' + t.desc + '</div>';
+                html += '</div>';
             });
+            html += '</div>';
+
+            html += '<div class="section-title">🔔 近期待办提醒</div>';
+            const pending = [
+                { title: '📝 四六级成绩查询', desc: '考试已结束，请留意成绩公布时间', icon: 'urgent' },
+                { title: '📚 期末复习备考', desc: '军事理论已考完，其他科目期末复习请合理安排', icon: 'warn' },
+                { title: '🏫 下学期学生证/优惠卡', desc: '若有补办需求可关注下学期通知', icon: 'info' },
+            ];
+            pending.forEach(p => {
+                html += '<div class="info-box ' + p.icon + '" style="margin:6px 0;">';
+                html += '<strong>' + p.title + '</strong><br>';
+                html += '<span style="color:#555;">' + p.desc + '</span>';
+                html += '</div>';
+            });
+
+            html += '<div class="section-title">💡 总结与建议</div>';
+            html += '<ul>';
+            html += '<li><strong>消息活跃时段：</strong> 5月中旬为活动通知高峰期（大地彩绘、朗诵、排球赛等），6月上旬转入学习提醒模式（军事理论、四级、认证考试）。</li>';
+            html += '<li><strong>主要信息源：</strong> 「啓」承担了绝大部分活动/比赛通知（占消息总数约 ' + Math.round(sender啓/total*100) + '%），是班级信息中枢。</li>';
+            html += '<li><strong>时效性提示：</strong> 当前所有消息均为已过期/已结束事件，建议通知群内同学关注下学期初的选课和活动通知。</li>';
+            html += '<li><strong>机器人状态：</strong> NapCat QQ Bot 近期未记录到新的群消息。如需持续追踪，建议确保 NapCat 保持在线运行。</li>';
+            html += '</ul>';
+
+            html += '<p style="margin-top:20px;color:#999;font-size:12px;text-align:center;">🤖 AI 自动分析 · 生成时间 2026-06-26 · 由 deepseek-chat 驱动</p>';
+            return html;
+        }
+
+        function buildCalendar() {
+            // 待办事项（置顶）
+            const now = new Date();
+            const todayStr = now.toISOString().slice(0,10);
             
-            Object.keys(calMap).sort().forEach(d => {
-                const c = calMap[d];
-                const isSoon = d >= '2026-06-14' && d <= '2026-06-20';
-                const dateDisplay = d.slice(5);
-                html += '<tr' + (isSoon ? ' style="background:#fffbeb;font-weight:600;color:#d97706;"' : '') + '>' +
-                    '<td' + (isSoon ? ' style="font-weight:600;color:#d97706;"' : '') + '>' + dateDisplay + '</td>' +
-                    '<td>' + c.events + ' 个事件 / ' + c.studies + ' 个学习</td>' +
-                    '<td>' + c.total + ' 条</td></tr>';
+            let html = '<div class="section-title" style="border-bottom-color:#c53030;">⏰ 待办事项</div>';
+            html += '<div class="info-box urgent" style="margin:6px 0;">' +
+                '<strong>📌 6月16日-6月20日 · 军事理论期末考</strong><br>' +
+                '<span style="color:#555;">知到（智慧树）军事理论课考试 — 6月15日已截止刷课，6.16-6.20期末考试！</span></div>';
+            
+            // 活动日历
+            let items = messages.filter(m => m.type === 'event' || m.type === 'study');
+            let cal = [];
+            items.forEach(m => {
+                const dateStr = (m.time||'').slice(0,10);
+                let label = m.text.replace(/<br>/g, ' ').replace(/@all|@全体成员/g,'').trim().slice(0, 40);
+                if (label.includes('军事理论') || label.includes('知到')) label = '军事理论刷课/考试（6.15截止刷课）';
+                if (label.includes('四级') || label.includes('准考证')) label = '四级准考证打印';
+                if (label.includes('学生证补办')) label = '学生证补办（已截止6.10）';
+                if (label.includes('大地彩绘')) label = '大地彩绘活动（5.16浮山海月广场）';
+                if (label.includes('AI智能体')) label = 'AI智能体创新大赛决赛';
+                if (label.includes('朗诵')) label = '五四朗诵比赛（5.14截止报名）';
+                if (label.includes('家乡')) label = '家乡主题摄影公益活动（5.13-5.22）';
+                if (label.includes('排球')) label = '校排球赛（5.28开赛）';
+                if (label.includes('健康跑')) label = '校园健康跑（5.23比赛）';
+                if (label.includes('绘画')) label = '绘画解压活动（5.21博知楼511）';
+                if (label.includes('学生会')) label = '学生会竞选（5.28截止报名）';
+                if (label.includes('艺术展演')) label = '大学生艺术展演选拔';
+                if (label.includes('进社区')) label = '进社区案例征集（5.31截止）';
+                if (label.includes('蒲公英')) label = '蒲公英人才计划（华为认证）';
+                if (label.includes('XCTF')) label = 'XCTF AI+安全选拔赛';
+                cal.push({ date: dateStr, label: label });
+            });
+            cal.sort((a, b) => a.date.localeCompare(b.date));
+
+            html += '<div class="section-title">📅 活动日历</div>';
+            html += '<table><tr><th style="width:120px;">日期</th><th>活动/事项</th></tr>';
+            cal.forEach(c => {
+                const isSoon = c.date >= '2026-06-14' && c.date <= '2026-06-20';
+                html += '<tr' + (isSoon ? ' style="background:#fffbe6;"' : '') + '>' +
+                    '<td' + (isSoon ? ' style="font-weight:600;color:#d97706;"' : '') + '>' + c.date.slice(5) + '</td>' +
+                    '<td>' + c.label + '</td></tr>';
             });
             html += '</table>';
             return html;
         }
 
         function buildStudy() {
-            const items = messages.filter(m => m.type === 'study');
-            let html = '<div class="section-title">📚 学习计划</div>';
-            if (items.length === 0) {
-                html += '<p class="empty-tip">暂无学习计划</p>';
-            } else {
-                items.forEach(m => {
-                    html += '<div class="msg-item" style="border-left-color:#c53030;">' +
-                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time.slice(0, 16).replace('T', ' ') + '</span></div>' +
-                        '<div class="msg-text">' + (m.text || '').replace(/\n/g, '<br>') + '</div></div>';
-                });
-            }
-            return html;
-        }
-
-        function buildEvents() {
-            const items = messages.filter(m => m.type === 'event' || !m.type);
-            let html = '<div class="section-title">🎪 群聊事件中</div>';
-            if (items.length === 0) {
-                html += '<p class="empty-tip">暂无事件</p>';
-            } else {
-                items.forEach(m => {
-                    const date = new Date(m.time);
-                    const today = new Date();
-                    const diffDays = Math.floor((today - date) / (1000*60*60*24));
-                    html += '<div class="msg-item"' + (diffDays <= 7 ? ' style="border-left-color:#d97706;background:#fffbeb;"' : '') + '>' +
-                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time.slice(0, 16).replace('T', ' ') + '</span>' +
-                        (diffDays <= 7 ? ' <span class="tag tag-red">近期</span>' : '') +
-                        '</div><div class="msg-text">' + (m.text || '').replace(/\n/g, '<br>') + '</div></div>';
-                });
-            }
-            return html;
-        }
-
-        function buildPastevents() {
-            let html = '<div class="section-title">🗋 过往群聊</div>';
-            const items = messages.filter(m => m.type === 'past' || m.type === undefined);
-            // 按事件分组
-            html += '<p class="empty-tip">历史消息自动归档中...</p>';
-            return html;
-        }
-
-        function buildRaw() {
-            let html = '<div class="section-title">📜 原始群聊</div>';
-            const reversed = [...messages].reverse();
-            reversed.forEach(m => {
-                html += '<div class="msg-item">' +
-                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time.slice(0, 16).replace('T', ' ') + '</span></div>' +
-                    '<div class="msg-text">' + (m.text || '').replace(/\n/g, '<br>') + '</div></div>';
+            let items = messages.filter(m => m.type === 'study');
+            let html = '<div class="section-title">📚 学业通知</div>';
+            items.forEach(m => {
+                html += '<div class="msg-item" style="border-left-color:#c53030;">' +
+                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + (m.time||'').slice(0, 16).replace('T', ' ') + '</span></div>' +
+                    '<div class="msg-text">' + (m.text||'').replace(/\n/g, '<br>') + '</div></div>';
             });
             return html;
         }
 
-        
-        // ====== AI 分析总结数据 ======
-        function buildAIAnalysis() {
-            let html = '<div class="section-title" style="border-bottom-color:#1C64F2;">🤖 AI 智能分析总结</div>';
-            html += '<div class="stat-row">';
-            html += '<div class="stat-card"><div class="num">18</div><div class="label">消息总数</div></div>';
-            html += '<div class="stat-card"><div class="num">15</div><div class="label">活动通知</div></div>';
-            html += '<div class="stat-card"><div class="num">3</div><div class="label">学习计划</div></div>';
-            html += '<div class="stat-card"><div class="num">3</div><div class="label">发布者</div></div>';
-            html += '</div>';
-            
-            html += '<p style="background:#f0f7ff;padding:12px 16px;border-radius:8px;color:#1a56db;font-size:14px;line-height:1.8;">截至6月26日，25计科03班群聊共记录 18 条有效通知消息，由 啓、那你懂我意思了.、潘林 等发布。</p>';
-
-            html += '<div class="sub-title">🎨 文体活动</div><ul style="margin:4px 0 12px 20px;">';
-            html += '<li style="margin:4px 0;color:#444;">大地彩绘活动（5.16）- 掌印彩绘+白T绘制，证书+学时+综测</li>';
-            html += '<li style="margin:4px 0;color:#444;">五四朗诵比赛（5.14截止报名）</li>';
-            html += '<li style="margin:4px 0;color:#444;">「妙笔纾心」绘画解压活动（5.21）- 仅10名额</li>';
-            html += '<li style="margin:4px 0;color:#444;">2026校排球赛（5.28开赛）/ 校园健康跑（5.23）</li>';
-            html += '<li style="margin:4px 0;color:#444;">山东省大学生艺术展演选拔</li></ul>';
-
-            html += '<div class="sub-title">📚 学业通知</div><ul style="margin:4px 0 12px 20px;">';
-            html += '<li style="margin:4px 0;color:#444;">军事理论知到网课：6.15截止刷课，6.20截止考试（潘林@全体提醒）</li>';
-            html += '<li style="margin:4px 0;color:#444;">四级准考证已开放打印（6.12通知）</li>';
-            html += '<li style="margin:4px 0;color:#444;">2026春季第二次学生证补办（6.10截止）</li></ul>';
-
-            html += '<div class="sub-title">🏆 竞赛/实践</div><ul style="margin:4px 0 12px 20px;">';
-            html += '<li style="margin:4px 0;color:#444;">AI智能体创新大赛决赛 / XCTF AI+安全选拔赛-青岛大学站</li>';
-            html += '<li style="margin:4px 0;color:#444;">华为×博赛「蒲公英人才计划」- 496元考7张华为认证</li>';
-            html += '<li style="margin:4px 0;color:#444;">「大学生进社区」实践案例征集（5.31截止）</li></ul>';
-
-            html += '<div class="sub-title">📋 组织事务</div><ul style="margin:4px 0 12px 20px;">';
-            html += '<li style="margin:4px 0;color:#444;">学生会换届竞选结果公示（6.13）</li>';
-            html += '<li style="margin:4px 0;color:#444;">2026届学生会主席团及负责人公开竞选（5.28截止）</li>';
-            html += '<li style="margin:4px 0;color:#444;">「情系故土」摄影公益活动（5.13-5.22）</li></ul>';
-            
-            html += '<div class="section-title" style="border-bottom-color:#c53030;margin-top:24px;">⚠️ 近期关注</div>';
-            html += '<div class="msg-item" style="border-left-color:#c53030;background:#fff5f5;"><div class="msg-text"><strong>当前注意事项：</strong>军事理论期末考试（6.20前）已过截止日期；四级考试在6月中旬举行；学生证补办已结束。NapCat日志最后更新于6月20日，近一周无新消息记录。</div></div>';
-            
-            html += '<div class="section-title" style="border-bottom-color:#059669;margin-top:24px;">📊 数据统计</div>';
-            html += '<p style="background:#f0fdf4;padding:12px 16px;border-radius:8px;color:#065f46;font-size:13px;line-height:1.8;">📊 共 ' + total + ' 条消息（活动通知 ' + events.length + ' 条，学习计划 ' + studies.length + ' 条），时间跨度 5月12日 ~ 6月15日，由 ' + senders.join('、') + ' 发布。</p>';
-            
+        function buildEvents() {
+            let items = messages.filter(m => m.type === 'event' && (m.time||'').substring(0,10) >= '2026-06-10');
+            let html = '<div class="section-title">🎪 活动进行中</div>';
+            if (items.length === 0) {
+                html += '<p class="empty-tip">暂无进行中的活动</p>';
+            } else {
+                items.forEach(m => {
+                    html += '<div class="msg-item" style="border-left-color:#6b3fa0;">' +
+                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + (m.time||'').slice(0, 16).replace('T', ' ') + '</span><span class="tag tag-green">进行中</span></div>' +
+                        '<div class="msg-text">' + (m.text||'').replace(/\n/g, '<br>') + '</div></div>';
+                });
+            }
             return html;
         }
 
+        function buildPastEvents() {
+            let items = messages.filter(m => m.type === 'event' && (m.time||'').substring(0,10) < '2026-06-10');
+            let html = '<div class="section-title">📋 过往活动</div>';
+            if (items.length === 0) {
+                html += '<p class="empty-tip">暂无过往活动</p>';
+            } else {
+                items.forEach(m => {
+                    html += '<div class="msg-item" style="border-left-color:#888;">' +
+                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + (m.time||'').slice(0, 16).replace('T', ' ') + '</span><span class="tag">已结束</span></div>' +
+                        '<div class="msg-text">' + (m.text||'').replace(/\n/g, '<br>') + '</div></div>';
+                });
+            }
+            return html;
+        }
+
+        function buildTimetable() {
+            let html = '<div class="section-title">🗓 本周课表（6.15 - 6.21）</div>';
+            
+            // 时间说明
+            html += '<div class="stat-row">';
+            html += '<div class="stat-card"><div class="num">' + timetable.length + '</div><div class="label">上课天数</div></div>';
+            const totalSlots = timetable.reduce((sum, d) => sum + d.slots.length, 0);
+            html += '<div class="stat-card"><div class="num">' + totalSlots + '</div><div class="label">课程节次</div></div>';
+            html += '</div>';
+            
+            // 节次说明
+            html += '<div class="sub-title">⏰ 节次说明</div>';
+            html += '<div style="font-size:12px;color:#888;margin-bottom:12px;line-height:1.6;">';
+            html += '1、2节(08:00-09:50) | 3、4节(10:10-12:00) | 5、6节(14:00-15:50)<br>';
+            html += '7、8节(16:10-18:00) | 9、10节(18:30-20:20) | 11节(20:30-21:15)';
+            html += '</div>';
+            
+            // 获取今天日期用于判断
+            const nowDate = new Date();
+            const todayMD = (nowDate.getMonth()+1) + '.' + nowDate.getDate();
+            
+            timetable.forEach(d => {
+                const isToday = d.day.includes(todayMD);
+                html += '<div class="section-title"' + (isToday ? ' style="border-bottom-color:#c53030;"' : '') + '>' + d.day + '</div>';
+                
+                d.slots.forEach(s => {
+                    const periodInfo = periodMap[s.period] || s.period;
+                    // 判断当前节次是否正在进行中（上课中或即将上）
+                const hour = nowDate.getHours();
+                const minute = nowDate.getMinutes();
+                let isNow = false;
+                if (s.period === '1-2节' && isToday && hour >= 8 && hour < 10) isNow = true;
+                else if (s.period === '3-4节' && isToday && hour >= 10 && hour < 12) isNow = true;
+                else if (s.period === '5-6节' && isToday && hour >= 14 && hour < 16) isNow = true;
+                else if (s.period === '7-8节' && isToday && hour >= 16 && hour < 18) isNow = true;
+                else if (s.period === '11节' && isToday && hour >= 20 && hour < 22) isNow = true;
+                html += '<div class="msg-item"' + (isNow ? ' style="border-left-color:#c53030;background:#fff5f5;"' : '') + '>' +
+                        '<div><span class="msg-sender">' + s.period + '</span><span class="msg-time">' + periodInfo + '</span></div>' +
+                        '<div class="msg-text"><strong>' + s.course + '</strong>' + (s.room ? ' @ ' + s.room : '') + '</div></div>';
+                });
+            });
+            return html;
+        }
+
+        function buildRaw() {
+            let html = '<div class="section-title">📜 原始消息</div>';
+            messages.forEach(m => {
+                var tagClass = m.type === 'study' ? 'tag-red' : 'tag-purple';
+                var tagText = m.type === 'study' ? '学业' : '活动';
+                html += '<div class="msg-item">' +
+                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + (m.time||'').slice(0, 16).replace('T', ' ') + '</span><span class="tag ' + tagClass + '">' + tagText + '</span></div>' +
+                    '<div class="msg-text">' + (m.text||'').replace(/\n/g, '<br>') + '</div></div>';
+            });
+            return html;
+        }
+
+        // ===== 标签切换 =====
         function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
             document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
-            const content = document.getElementById('summaryContent');
+            var content = document.getElementById('summaryContent');
             switch(tab) {
+                case 'ai': content.innerHTML = buildAI(); break;
                 case 'calendar': content.innerHTML = buildCalendar(); break;
                 case 'study': content.innerHTML = buildStudy(); break;
                 case 'events': content.innerHTML = buildEvents(); break;
-                case 'pastevents': content.innerHTML = buildPastevents(); break;
-                case 'ai': content.innerHTML = buildAIAnalysis(); break;
+                case 'pastevents': content.innerHTML = buildPastEvents(); break;
+                case 'timetable': content.innerHTML = buildTimetable(); break;
                 case 'raw': content.innerHTML = buildRaw(); break;
             }
         }
 
-        // 默认显示AI分析
-        switchTab('ai');
+        window.addEventListener('load', function() { switchTab('ai'); });
     </script>
 </body>
 </html>
+
