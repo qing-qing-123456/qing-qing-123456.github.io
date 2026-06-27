@@ -11,7 +11,7 @@
         .header h1 { color: #1a1a2e; font-size: 22px; margin: 0; }
         .header-sub { color: #888; font-size: 13px; font-weight: normal; margin-left: 10px; }
         .summary-section { flex: 1; padding: 20px 30px; overflow: hidden; display: flex; flex-direction: column; }
-        .summary-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-shrink: 0; }
+        .summary-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-shrink: 0; flex-wrap: wrap; }
         .tab-btn { padding: 8px 20px; border: 1px solid #ddd; background: #fff; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
         .tab-btn.active { background: #1C64F2; color: #fff; border-color: #1C64F2; }
         .tab-btn:hover:not(.active) { background: #f0f4ff; }
@@ -28,6 +28,17 @@
         .tag-red { background: #fde8e8; color: #c53030; }
         .tag-purple { background: #f0e8ff; color: #6b3fa0; }
         .tag-green { background: #e6f7ed; color: #0f7b3e; }
+        .tag-blue { background: #e8f0fe; color: #1a56db; }
+        .tag-orange { background: #fff3e0; color: #e65100; }
+        .ai-card { background: linear-gradient(135deg, #eff6ff 0%, #faf5ff 100%); border: 1px solid #c7d2fe; border-radius: 10px; padding: 18px 22px; margin: 10px 0; }
+        .ai-card .title { font-size: 16px; font-weight: 700; color: #4338ca; margin-bottom: 10px; }
+        .ai-card .badge { display: inline-block; background: #4f46e5; color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+        .ai-section { margin: 12px 0; }
+        .ai-section h4 { color: #1e40af; font-size: 14px; margin: 8px 0 4px; }
+        .ai-section ul { margin: 4px 0 4px 18px; }
+        .ai-section li { margin: 3px 0; }
+        .priority-high { border-left: 4px solid #dc2626; background: #fef2f2; padding: 8px 14px; margin: 6px 0; border-radius: 4px; font-size: 13px; }
+        .priority-mid { border-left: 4px solid #f59e0b; background: #fffbeb; padding: 8px 14px; margin: 6px 0; border-radius: 4px; font-size: 13px; }
         table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
         th, td { border: 1px solid #e0e0e0; padding: 8px 12px; text-align: left; }
         th { background: #f0f4ff; font-weight: 600; }
@@ -37,6 +48,8 @@
         .stat-card .num { font-size: 24px; font-weight: 700; color: #1C64F2; }
         .stat-card .label { font-size: 12px; color: #888; margin-top: 2px; }
         .empty-tip { color: #999; text-align: center; padding: 40px 0; }
+        .deadline-warning { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px 16px; margin: 10px 0; }
+        .deadline-warning .title { font-weight: 700; color: #92400e; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
@@ -49,10 +62,10 @@
     </div>
     <div class="summary-section">
         <div class="summary-tabs">
-            <button class="tab-btn active" data-tab="calendar" onclick="switchTab('calendar')">📒 群聊日历</button>
+            <button class="tab-btn active" data-tab="ai" onclick="switchTab('ai')">🤖 AI 智能总结</button>
+            <button class="tab-btn" data-tab="calendar" onclick="switchTab('calendar')">📒 群聊日历</button>
             <button class="tab-btn" data-tab="study" onclick="switchTab('study')">📚 学习计划</button>
-            <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎪 群聊事件中</button>
-            <button class="tab-btn" data-tab="pastevents" onclick="switchTab('pastevents')">🗋 过往群聊</button>
+            <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎪 群聊事件</button>
             <button class="tab-btn" data-tab="raw" onclick="switchTab('raw')">📜 原始群聊</button>
         </div>
         <div class="summary-content" id="summaryContent">
@@ -61,20 +74,124 @@
     </div>
     <script>
         // ====== 群消息数据 ======
-        const messages = [{"time":"2026-05-12 14:20","sender":"啓","text":"📣 @all \"青心向国 大梦启航\"大地彩绘活动即将举办...活动通过掌印彩绘、创意白T绘制等形式完成主题创作。参与可获证书+第二课堂学时+综测。\n时间：5.16 上午9点\n地点：浮山海月广场","type":"event"},{"time":"2026-05-12 14:21","sender":"啓","text":"青岛大学首届 AI 智能体创新大赛（决赛）通知。","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"https://mp.weixin.qq.com/s/U1gZCrsKM3a7nW_RAE1J2A","type":"event"},{"time":"2026-05-14 09:07","sender":"啓","text":"\"情系故土，礼赞家乡\"主题公益活动\n时间：5.13-5.22\n扫码上传摄影作品（家乡风光/人文/民俗），获综测+学时+公益证书。一等奖可获国家级媒体专访。\n活动QQ群：1078753135","type":"event"},{"time":"2026-05-16 11:33","sender":"啓","text":"2026年校排球赛队员召集令\n男女混合制（至少2位女同学）\n5.28开赛，5.19报名截止\n浮山西院排球场","type":"event"},{"time":"2026-05-16 18:37","sender":"啓","text":"2026校园健康跑报名通知\n5.23比赛，5.19下午4点截止\n男女各限15人，参赛记第二课堂","type":"event"},{"time":"2026-05-19 12:13","sender":"啓","text":"「妙笔纾心，向阳逐光」绘画解压活动\n时间：5.21下午1:40-3:00\n地点：博知楼511\n仅10个名额，扫码报名","type":"event"},{"time":"2026-05-23 19:26","sender":"啓","text":"公开竞选2026届学生会主席团及各中心负责人\n主席团限2024级，中心负责人2024/2025均可\n报名截止5.28 12:00\n材料交至博知楼316","type":"event"},{"time":"2026-05-26 12:36","sender":"啓","text":"山东省第八届大学生艺术展演选拔\n报名材料发至邮箱430078583@qq.com","type":"event"},{"time":"2026-05-28 18:05","sender":"啓","text":"\"大学生进社区\"实践案例征集\n5.31中午12点截止\n发至邮箱 qdu_jsjzyzxh@126.com","type":"event"},{"time":"2026-06-10 10:55","sender":"那你懂我意思了.","text":"⏰ 知到（智慧树）军事理论课 6.15截止刷课，6.20截止考试！大家抓紧","type":"study"},{"time":"2026-06-10 14:36","sender":"啓","text":"华为×济南博赛「蒲公英人才计划」\n496元考7张华为认证证书（含HCIA-AI、鸿蒙等）\n全程线上，名额有限","type":"event"},{"time":"2026-06-12 12:48","sender":"那你懂我意思了.","text":"📢 四级准考证可以下载打印啦！\nhttps://cet-bm.neea.edu.cn/","type":"study"},{"time":"2026-06-13 00:26","sender":"啓","text":"XCTF 百城千赛·高校AI+安全选拔赛-青岛大学站\n使用组织码 Z7CBU3JY54AW 在 攻防世界 报名\nQQ群：784697982","type":"event"},{"time":"2026-06-13 00:33","sender":"啓","text":"学生会换届竞选结果公示","type":"event"},{"time":"2026-06-13 00:34","sender":"啓","text":"📢 2026春季第二次学生证补办\n6.10下午3点截止！\n费用：学生证5元/优惠卡7元/都办12元\n交至博知楼316","type":"study"},{"sender":"潘林","time":"2026-06-15 22:05:32","text":"@全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈","type":"study"},{"sender":"金建宇","text":"https://mp.weixin.qq.com/s/82LjUvidJ0Zh4rqLDFUn-g","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"📣  大家好～ @全体成员    ... ⬇  ...","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"https://mp.weixin.qq.com/s?__biz=MzIwMzM4Njc4OA==&mid=2247555232&idx=1&sn=3da93e0071f2899816313b996d39d665&chksm=97d0b5ee7df9f47ed8487f7299f5c457d4f8822d08594eb6ade791d3a515097396b8ad8d161a&mpshare=1&scene=23&srcid=0621gvzs5zwyNSNDxbH75F4Y&sharer_shareinfo=d8826d7d74511b38ebbe8429e6d2dce3&sharer_shareinfo_first=31be49e16da147b3cdd89c3108af786f#rd","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"@全体成员   想要感受一下毕业氛围的可以看看","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"@全体成员  学生评教工作23号就要结束了没评教的同学不要忘了哈","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"咱们评教时，优先通过电脑端使用Firefox、Chrome、360、qq浏览器登录http://xjw.qdu.edu.cn/进行评教，若手机端请使用企业微信或登录https://xjw.qdu.edu.cn/进行评教（重修课程不参与评教） 【表情】","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"关于开展 2026 年青岛大学大学生暑期文化科技卫生“三下乡”社会实践活动暨“青年红色筑梦之旅”活动的预备通知 ... @全体成员","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"[图片]","time":"2026-06-27T09:49:09.443Z"},{"sender":"赵毅","text":"C课程设计作业需要同学们本周日18点之前交齐：实验报告册、学生成绩管理系统的工程目录压缩包。交给学习委员。","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"@全体成员  双创课的期末作业今天就要截止了大家不要忘了提交给李俊豪 【表情】","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"作业要求","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"[转发消息]","time":"2026-06-27T09:49:09.443Z"}];
+        const messages = [{"time":"2026-05-12 14:20","sender":"啓","text":"📣 @all \\"青心向国 大梦启航\\"大地彩绘活动即将举办...活动通过掌印彩绘、创意白T绘制等形式完成主题创作。参与可获证书+第二课堂学时+综测。\\n时间：5.16 上午9点\\n地点：浮山海月广场","type":"event"},{"time":"2026-05-12 14:21","sender":"啓","text":"青岛大学首届 AI 智能体创新大赛（决赛）通知。","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"五四朗诵比赛报名通知 ✨\\n用朗诵诉说青春。报名截止5.14 9:00\\n发送至邮箱 qdu_computer@126.com","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"https://mp.weixin.qq.com/s/U1gZCrsKM3a7nW_RAE1J2A","type":"event"},{"time":"2026-05-14 09:07","sender":"啓","text":"\\"情系故土，礼赞家乡\\"主题公益活动\\n时间：5.13-5.22\\n扫码上传摄影作品（家乡风光/人文/民俗），获综测+学时+公益证书。一等奖可获国家级媒体专访。\\n活动QQ群：1078753135","type":"event"},{"time":"2026-05-16 11:33","sender":"啓","text":"2026年校排球赛队员召集令\\n男女混合制（至少2位女同学）\\n5.28开赛，5.19报名截止\\n浮山西院排球场","type":"event"},{"time":"2026-05-16 18:37","sender":"啓","text":"2026校园健康跑报名通知\\n5.23比赛，5.19下午4点截止\\n男女各限15人，参赛记第二课堂","type":"event"},{"time":"2026-05-19 12:13","sender":"啓","text":"「妙笔纾心，向阳逐光」绘画解压活动\\n时间：5.21下午1:40-3:00\\n地点：博知楼511\\n仅10个名额，扫码报名","type":"event"},{"time":"2026-05-23 19:26","sender":"啓","text":"公开竞选2026届学生会主席团及各中心负责人\\n主席团限2024级，中心负责人2024/2025均可\\n报名截止5.28 12:00\\n材料交至博知楼316","type":"event"},{"time":"2026-05-26 12:36","sender":"啓","text":"山东省第八届大学生艺术展演选拔\\n报名材料发至邮箱430078583@qq.com","type":"event"},{"time":"2026-05-28 18:05","sender":"啓","text":"\\"大学生进社区\\"实践案例征集\\n5.31中午12点截止\\n发至邮箱 qdu_jsjzyzxh@126.com","type":"event"},{"time":"2026-06-10 10:55","sender":"那你懂我意思了.","text":"⏰ 知到（智慧树）军事理论课 6.15截止刷课，6.20截止考试！大家抓紧","type":"study"},{"time":"2026-06-10 14:36","sender":"啓","text":"华为×济南博赛「蒲公英人才计划」\\n496元考7张华为认证证书（含HCIA-AI、鸿蒙等）\\n全程线上，名额有限","type":"event"},{"time":"2026-06-12 12:48","sender":"那你懂我意思了.","text":"📢 四级准考证可以下载打印啦！\\nhttps://cet-bm.neea.edu.cn/","type":"study"},{"time":"2026-06-13 00:26","sender":"啓","text":"XCTF 百城千赛·高校AI+安全选拔赛-青岛大学站\\n使用组织码 Z7CBU3JY54AW 在 攻防世界 报名\\nQQ群：784697982","type":"event"},{"time":"2026-06-13 00:33","sender":"啓","text":"学生会换届竞选结果公示","type":"event"},{"time":"2026-06-13 00:34","sender":"啓","text":"📢 2026春季第二次学生证补办\\n6.10下午3点截止！\\n费用：学生证5元/优惠卡7元/都办12元\\n交至博知楼316","type":"study"},{"sender":"潘林","time":"2026-06-15 22:05:32","text":"@全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈","type":"study"},{"sender":"金建宇","text":"https://mp.weixin.qq.com/s/82LjUvidJ0Zh4rqLDFUn-g","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"📣  大家好～ @全体成员    ... ⬇  ...","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"https://mp.weixin.qq.com/s?__biz=MzIwMzM4Njc4OA==&mid=2247555232&idx=1&sn=3da93e0071f2899816313b996d39d665&chksm=97d0b5ee7df9f47ed8487f7299f5c457d4f8822d08594eb6ade791d3a515097396b8ad8d161a&mpshare=1&scene=23&srcid=0621gvzs5zwyNSNDxbH75F4Y&sharer_shareinfo=d8826d7d74511b38ebbe8429e6d2dce3&sharer_shareinfo_first=31be49e16da147b3cdd89c3108af786f#rd","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"@全体成员   想要感受一下毕业氛围的可以看看","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"@全体成员  学生评教工作23号就要结束了没评教的同学不要忘了哈","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"咱们评教时，优先通过电脑端使用Firefox、Chrome、360、qq浏览器登录http://xjw.qdu.edu.cn/进行评教，若手机端请使用企业微信或登录https://xjw.qdu.edu.cn/进行评教（重修课程不参与评教） 【表情】","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"关于开展 2026 年青岛大学大学生暑期文化科技卫生"三下乡"社会实践活动暨"青年红色筑梦之旅"活动的预备通知 ... @全体成员","time":"2026-06-27T09:49:09.443Z"},{"sender":"金建宇","text":"[图片]","time":"2026-06-27T09:49:09.443Z"},{"sender":"赵毅","text":"C课程设计作业需要同学们本周日18点之前交齐：实验报告册、学生成绩管理系统的工程目录压缩包。交给学习委员。","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"@全体成员  双创课的期末作业今天就要截止了大家不要忘了提交给李俊豪 【表情】","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"作业要求","time":"2026-06-27T09:49:09.443Z"},{"sender":"潘林","text":"[转发消息]","time":"2026-06-27T09:49:09.443Z"}];
         
         messages.sort((a, b) => new Date(a.time) - new Date(b.time));
+
+        // ====== 工具函数 ======
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+        }
+
+        function formatTime(isoTime) {
+            return isoTime.slice(0, 16).replace('T', ' ');
+        }
+
+        // ====== AI 总结 ======
+        function buildAI() {
+            let html = '<div class="ai-card"><div class="title">🤖 AI 智能分析 · ' + new Date().toLocaleDateString('zh-CN') + '</div>';
+            html += '<p style="color:#666;font-size:13px;margin-bottom:14px;">基于群聊消息的自动分类与提炼，帮助快速掌握班级动态</p>';
+
+            // === 今日概览 ===
+            const today = '2026-06-27';
+            const todayMsgs = messages.filter(m => m.time.startsWith(today) || m.time.startsWith('2026-06-27'));
+            const allToday = messages.filter(m => {
+                const d = new Date(m.time);
+                return d.toISOString().startsWith('2026-06-27') || m.time.startsWith('2026-06-27');
+            });
+            
+            html += '<div class="ai-section">';
+            html += '<h4>📊 今日概览</h4>';
+            html += '<div class="stat-row">';
+            html += '<div class="stat-card"><div class="num">' + todayMsgs.length + '</div><div class="label">今日消息</div></div>';
+            // 计算今日发言人数
+            const todaySenders = [...new Set(todayMsgs.map(m => m.sender))];
+            html += '<div class="stat-card"><div class="num">' + todaySenders.length + '</div><div class="label">发言人数</div></div>';
+            // 计算截止/DDL相关
+            const deadlineMsgs = todayMsgs.filter(m => m.text.includes('截止') || m.text.includes('交齐') || m.text.includes('不要忘了'));
+            html += '<div class="stat-card"><div class="num" style="color:#dc2626;">' + deadlineMsgs.length + '</div><div class="label">截止提醒</div></div>';
+            // 今日联系
+            html += '<div class="stat-card"><div class="num">' + todaySenders.join('、') + '</div><div class="label">活跃同学</div></div>';
+            html += '</div></div>';
+
+            // === 紧急事项 ===
+            html += '<div class="ai-section">';
+            html += '<h4>🚨 紧急事项（今日/明日截止）</h4>';
+            
+            html += '<div class="priority-high">🔴 <strong>【今天截止】双创课期末作业</strong> — 潘林提醒：双创课期末作业今天截止，提交给李俊豪</div>';
+            html += '<div class="priority-high">🔴 <strong>【明天截止】C课程设计作业</strong> — 赵毅提醒：本周日（6/28）18:00前交齐实验报告册+学生成绩管理系统工程目录压缩包，交给学习委员</div>';
+            html += '<div class="priority-mid">🟡 <strong>【已过期提醒】学生评教</strong> — 潘林提醒：评教工作6月23日已结束，未评教的需尽快联系确认</div>';
+            html += '</div>';
+
+            // === 事件分类 ===
+            html += '<div class="ai-section">';
+            html += '<h4>📋 今日消息分类</h4>';
+            html += '<div class="sub-title">📌 活动通知</div>';
+            html += '<ul>';
+            html += '<li><span class="tag tag-orange">金建宇</span> 分享毕业氛围相关内容，邀请大家感受毕业季</li>';
+            html += '<li><span class="tag tag-orange">金建宇</span> 发布"三下乡"社会实践暨"青年红色筑梦之旅"活动预备通知（@全体成员）</li>';
+            html += '</ul>';
+            html += '<div class="sub-title">📌 学业提醒</div>';
+            html += '<ul>';
+            html += '<li><span class="tag tag-blue">潘林</span> 学生评教截止提醒（已过6/23，方式：电脑端xjw.qdu.edu.cn / 手机端企业微信）</li>';
+            html += '<li><span class="tag tag-blue">赵毅</span> C课程设计作业提交提醒（截止6/28周日18:00，交学习委员）</li>';
+            html += '<li><span class="tag tag-blue">潘林</span> 双创课期末作业今天截止（提交给李俊豪）</li>';
+            html += '</ul>';
+            html += '</div>';
+
+            // === 学期回顾 ===
+            html += '<div class="ai-section">';
+            html += '<h4>📅 学期重要回顾</h4>';
+            const allStudies = messages.filter(m => m.type === 'study');
+            html += '<div class="sub-title">📚 已完结的学习任务</div>';
+            html += '<ul>';
+            html += '<li>✅ 军事理论课（知到/智慧树）— 6/15刷课截止，6/20考试截止</li>';
+            html += '<li>✅ 四级准考证 — 6/12起可打印（考试已过）</li>';
+            html += '<li>✅ 学生证补办 — 春季第二次，6/10截止</li>';
+            html += '</ul>';
+            html += '<div class="sub-title">🏆 已结束的活动</div>';
+            html += '<ul>';
+            html += '<li>✅ 大地彩绘活动（5/16）</li>';
+            html += '<li>✅ AI智能体创新大赛决赛</li>';
+            html += '<li>✅ 五四朗诵比赛（5/14截止报名）</li>';
+            html += '<li>✅ 校排球赛（5/28开赛，5/19截止报名）</li>';
+            html += '<li>✅ 校园健康跑（5/23比赛）</li>';
+            html += '<li>✅ 绘画解压活动（5/21）</li>';
+            html += '<li>✅ 学生会换届竞选（5/28截止报名，6/13公示结果）</li>';
+            html += '<li>✅ 大学生艺术展演选拔、进社区实践案例征集</li>';
+            html += '<li>✅ XCTF百城千赛·AI+安全选拔赛</li>';
+            html += '<li>✅ 华为蒲公英人才计划（496元考7张华为认证）</li>';
+            html += '</ul>';
+            html += '</div>';
+
+            // === 趋势分析 ===
+            html += '<div class="ai-section">';
+            html += '<h4>📈 趋势分析</h4>';
+            html += '<div class="priority-mid">';
+            html += '<strong>本学期进入尾声：</strong> 从6月中旬开始，群消息从"活动通知"为主转向以"考试截止/作业提交/评教"等学务提醒为主。';
+            html += '目前6/27的关键节点是双创课期末作业（今天截止）和C课程设计（明天截止）。';
+            html += '暑假前最后一个节奏点是"三下乡"社会实践活动报名。';
+            html += '</div>';
+            html += '</div>';
+
+            html += '</div>'; // end ai-card
+            
+            html += '<p style="text-align:right;color:#999;font-size:12px;margin-top:8px;">由影（AI助手）自动生成 · ' + new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) + '</p>';
+            return html;
+        }
 
         // ====== 渲染函数 ======
         function buildCalendar() {
             const events = messages.filter(m => m.type === 'event' || !m.type);
             const studies = messages.filter(m => m.type === 'study');
             
-            // 近期高亮
             let html = '<div class="section-title" style="border-bottom-color:#c53030;">🔰 近期重点</div>';
-            html += '<div class="msg-item" style="border-left-color:#c53030;background:#fff5f5;">' +
-                '<div><span class="msg-sender" style="color:#c53030;">📌 6月11日-15日 晚间7:15-8:15</span></div>' +
-                '<div class="msg-text"><strong>群聊机器人·群消息汇总</strong> — 每日 AI 自动抓取总结</div></div>';
+            html += '<div class="deadline-warning"><div class="title">⏰ 当前亟需处理（6/27-6/28）</div>';
+            html += '<ul style="margin:8px 0 0 18px;">';
+            html += '<li><strong>6/27（今天）</strong> — 双创课期末作业提交给李俊豪</li>';
+            html += '<li><strong>6/28（周日）</strong> — C课程设计作业交学习委员（实验报告册+工程目录压缩包）</li>';
+            html += '</ul></div>';
             
             html += '<div class="section-title">📅 群聊日历</div>';
             html += '<table><tr><th style="width:120px;">日期</th><th>事件/学习</th><th>消息数</th></tr>';
@@ -90,7 +207,7 @@
             
             Object.keys(calMap).sort().forEach(d => {
                 const c = calMap[d];
-                const isSoon = d >= '2026-06-14' && d <= '2026-06-20';
+                const isSoon = d >= '2026-06-14';
                 const dateDisplay = d.slice(5);
                 html += '<tr' + (isSoon ? ' style="background:#fffbeb;font-weight:600;color:#d97706;"' : '') + '>' +
                     '<td' + (isSoon ? ' style="font-weight:600;color:#d97706;"' : '') + '>' + dateDisplay + '</td>' +
@@ -107,10 +224,25 @@
             if (items.length === 0) {
                 html += '<p class="empty-tip">暂无学习计划</p>';
             } else {
+                // 按紧急程度分组
+                const urgent = items.filter(m => m.text.includes('截止') || m.text.includes('交') || m.text.includes('考试'));
+                const normal = items.filter(m => !urgent.includes(m));
+                
+                if (urgent.length > 0) {
+                    html += '<div class="deadline-warning"><div class="title">⏰ 待办提醒</div>';
+                    urgent.forEach(m => {
+                        html += '<div class="msg-item" style="border-left-color:#dc2626;background:#fef2f2;">' +
+                            '<div><span class="msg-sender" style="color:#dc2626;">' + m.sender + '</span><span class="msg-time">' + formatTime(m.time) + '</span></div>' +
+                            '<div class="msg-text">' + escapeHtml(m.text) + '</div></div>';
+                    });
+                    html += '</div>';
+                }
+                
+                html += '<div class="section-title" style="font-size:15px;border-bottom-color:#0f7b3e;">📋 所有学习相关</div>';
                 items.forEach(m => {
                     html += '<div class="msg-item" style="border-left-color:#c53030;">' +
-                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time.slice(0, 16).replace('T', ' ') + '</span></div>' +
-                        '<div class="msg-text">' + (m.text || '').replace(/\n/g, '<br>') + '</div></div>';
+                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + formatTime(m.time) + '</span></div>' +
+                        '<div class="msg-text">' + escapeHtml(m.text) + '</div></div>';
                 });
             }
             return html;
@@ -118,38 +250,48 @@
 
         function buildEvents() {
             const items = messages.filter(m => m.type === 'event' || !m.type);
-            let html = '<div class="section-title">🎪 群聊事件中</div>';
+            let html = '<div class="section-title">🎪 群聊事件</div>';
             if (items.length === 0) {
                 html += '<p class="empty-tip">暂无事件</p>';
             } else {
-                items.forEach(m => {
-                    const date = new Date(m.time);
-                    const today = new Date();
-                    const diffDays = Math.floor((today - date) / (1000*60*60*24));
-                    html += '<div class="msg-item"' + (diffDays <= 7 ? ' style="border-left-color:#d97706;background:#fffbeb;"' : '') + '>' +
-                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time.slice(0, 16).replace('T', ' ') + '</span>' +
-                        (diffDays <= 7 ? ' <span class="tag tag-red">近期</span>' : '') +
-                        '</div><div class="msg-text">' + (m.text || '').replace(/\n/g, '<br>') + '</div></div>';
+                // 近期 vs 历史
+                const recent = items.filter(m => {
+                    const d = new Date(m.time);
+                    const now = new Date();
+                    return (now - d) < 7 * 24 * 60 * 60 * 1000 && m.time.startsWith('2026-06');
+                });
+                const past = items.filter(m => !recent.includes(m));
+                
+                if (recent.length > 0) {
+                    html += '<div class="section-title" style="font-size:15px;border-bottom-color:#d97706;">🔥 近期事件（本周）</div>';
+                    recent.forEach(m => {
+                        html += '<div class="msg-item" style="border-left-color:#d97706;background:#fffbeb;">' +
+                            '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + formatTime(m.time) + '</span>' +
+                            ' <span class="tag tag-red">近期</span></div>' +
+                            '<div class="msg-text">' + escapeHtml(m.text) + '</div></div>';
+                    });
+                }
+                
+                html += '<div class="section-title" style="font-size:15px;border-bottom-color:#6b3fa0;">📦 历史事件</div>';
+                past.forEach(m => {
+                    html += '<div class="msg-item">' +
+                        '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + formatTime(m.time) + '</span>' +
+                        ' <span class="tag tag-purple">历史</span></div>' +
+                        '<div class="msg-text">' + escapeHtml(m.text) + '</div></div>';
                 });
             }
             return html;
         }
 
-        function buildPastevents() {
-            let html = '<div class="section-title">🗋 过往群聊</div>';
-            const items = messages.filter(m => m.type === 'past' || m.type === undefined);
-            // 按事件分组
-            html += '<p class="empty-tip">历史消息自动归档中...</p>';
-            return html;
-        }
-
         function buildRaw() {
-            let html = '<div class="section-title">📜 原始群聊</div>';
+            let html = '<div class="section-title">📜 原始群聊 · 全部消息</div>';
+            html += '<p style="color:#888;font-size:13px;margin-bottom:10px;">共 ' + messages.length + ' 条消息，按时间倒序排列</p>';
             const reversed = [...messages].reverse();
             reversed.forEach(m => {
+                const typeLabel = m.type === 'study' ? ' <span class="tag tag-green">学习</span>' : (m.type === 'event' ? ' <span class="tag tag-purple">事件</span>' : '');
                 html += '<div class="msg-item">' +
-                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + m.time.slice(0, 16).replace('T', ' ') + '</span></div>' +
-                    '<div class="msg-text">' + (m.text || '').replace(/\n/g, '<br>') + '</div></div>';
+                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + formatTime(m.time) + '</span>' + typeLabel + '</div>' +
+                    '<div class="msg-text">' + escapeHtml(m.text) + '</div></div>';
             });
             return html;
         }
@@ -159,16 +301,16 @@
             document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
             const content = document.getElementById('summaryContent');
             switch(tab) {
+                case 'ai': content.innerHTML = buildAI(); break;
                 case 'calendar': content.innerHTML = buildCalendar(); break;
                 case 'study': content.innerHTML = buildStudy(); break;
                 case 'events': content.innerHTML = buildEvents(); break;
-                case 'pastevents': content.innerHTML = buildPastevents(); break;
                 case 'raw': content.innerHTML = buildRaw(); break;
             }
         }
 
-        // 默认显示日历
-        switchTab('calendar');
+        // 默认显示 AI 总结
+        switchTab('ai');
     </script>
 </body>
 </html>
