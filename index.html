@@ -1,174 +1,241 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="25计科03班 QQ群消息AI汇总 - 青岛大学">
-    <title>25计科03班 · 群消息AI汇总</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', sans-serif; background: #f5f7fa; height: 100vh; display: flex; flex-direction: column; }
-        .header { background: linear-gradient(135deg, #1a1a2e 0%, #1C64F2 100%); padding: 18px 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        .header h1 { color: #fff; font-size: 20px; margin: 0; }
-        .header-sub { color: rgba(255,255,255,0.7); font-size: 12px; font-weight: normal; margin-left: 10px; }
-        .header-time { color: rgba(255,255,255,0.6); font-size: 12px; }
-        .summary-section { flex: 1; padding: 16px 24px; overflow: hidden; display: flex; flex-direction: column; }
-        .summary-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-shrink: 0; flex-wrap: wrap; }
-        .tab-btn { padding: 7px 16px; border: 1px solid #ddd; background: #fff; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; white-space: nowrap; }
-        .tab-btn.active { background: #1C64F2; color: #fff; border-color: #1C64F2; box-shadow: 0 2px 6px rgba(28,100,242,0.3); }
-        .tab-btn:hover:not(.active) { background: #f0f4ff; }
-        .summary-content { flex: 1; overflow-y: auto; background: #fff; border-radius: 10px; border: 1px solid #e8ecf0; padding: 24px 28px; font-size: 14px; line-height: 1.8; }
-        .section-title { font-size: 17px; font-weight: 600; color: #1a1a2e; margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #1C64F2; }
-        .section-title:first-child { margin-top: 0; }
-        .sub-title { font-size: 15px; font-weight: 600; color: #2d3748; margin: 14px 0 6px; }
-        p { margin: 5px 0; color: #333; }
-        ul, ol { margin: 6px 0 6px 20px; }
-        li { margin: 4px 0; line-height: 1.6; }
-        .msg-item { padding: 10px 14px; margin: 6px 0; background: #f8fafc; border-left: 3px solid #1C64F2; border-radius: 4px; }
-        .msg-sender { font-weight: 600; color: #1C64F2; font-size: 13px; }
-        .msg-time { color: #888; font-size: 12px; margin-left: 8px; }
-        .msg-text { margin-top: 4px; white-space: pre-wrap; word-break: break-word; font-size: 13px; }
-        .tag { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 11px; margin: 2px 3px 2px 0; }
-        .tag-red { background: #fde8e8; color: #c53030; }
-        .tag-purple { background: #f0e8ff; color: #6b3fa0; }
-        .tag-green { background: #e6f7ed; color: #0f7b3e; }
-        table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
-        th, td { border: 1px solid #e0e0e0; padding: 7px 10px; text-align: left; }
-        th { background: #f0f4ff; font-weight: 600; }
-        .highlight { background: #fffbe6; padding: 1px 5px; border-radius: 3px; font-weight: 600; color: #d97706; }
-        .stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 10px 0; }
-        .stat-card { background: #f8fafc; border-radius: 8px; padding: 12px 16px; min-width: 110px; text-align: center; flex: 1; }
-        .stat-card .num { font-size: 22px; font-weight: 700; color: #1C64F2; }
-        .stat-card .label { font-size: 12px; color: #888; margin-top: 2px; }
-        .empty-tip { color: #999; text-align: center; padding: 40px 0; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #aaa; }
-        @media (max-width: 600px) {
-            .header { padding: 12px 16px; flex-direction: column; text-align: center; gap: 4px; }
-            .header h1 { font-size: 17px; }
-            .summary-section { padding: 10px 10px; }
-            .summary-tabs { justify-content: center; }
-            .summary-content { padding: 16px; }
-            .stat-row { flex-direction: column; }
-            .stat-card { min-width: auto; }
-        }
-    </style>
+<!-- saved from url=(0102)file:///C:/Users/shiyi/Desktop/work/qq_sign_package/%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E8%A3%85.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>部署与安装 - QQ群自动签到系统</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --text: #1f2328;
+    --muted: #59636e;
+    --accent: #2b7de9;
+    --accent-dark: #1a5fc7;
+    --border: #d8dee4;
+    --code-bg: #0d1117;
+    --code-text: #e6edf3;
+    --warn-bg: #fff8c5;
+    --warn-border: #d4a72c;
+    --ok: #1a7f37;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 24px 16px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  header {
+    background: linear-gradient(135deg, #1a5fc7, #2b7de9);
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+  }
+  header h1 { font-size: 24px; margin-bottom: 6px; }
+  header p { font-size: 14px; opacity: .9; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 20px;
+    color: var(--accent-dark);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  h3 { font-size: 16px; margin: 18px 0 10px; }
+  ol, ul { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  code {
+    background: rgba(43,125,233,.08);
+    color: #0b5cab;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+  }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 10px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  pre code { background: none; color: inherit; padding: 0; font-size: 13px; }
+  .warn {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-left: 4px solid var(--warn-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .note {
+    background: #eaf4ff;
+    border: 1px solid #b6d7ff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th { background: #f0f3f6; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .fig { margin: 14px 0; text-align: center; }
+  .fig img { max-width: 100%; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .fig-caption { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+  .step-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    border-radius: 20px;
+    padding: 2px 12px;
+    margin-right: 8px;
+    vertical-align: 2px;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    margin: 24px 0 8px;
+  }
+  @media (max-width: 600px) {
+    .card { padding: 16px; }
+    header { padding: 20px; }
+  }
+</style>
 </head>
 <body>
-    <div class="header">
-        <h1>25计科03班 · 群消息AI汇总<span class="header-sub">2026-05-12</span></h1>
-        <span class="header-time">🕲 更新于 2026-07-08 22:10</span>
-    </div>
-    <div class="summary-section">
-        <div class="summary-tabs">
-            <button class="tab-btn active" data-tab="summary" onclick="switchTab('summary')">🏻 AI总结</button>
-            <button class="tab-btn" data-tab="calendar" onclick="switchTab('calendar')">📾 群聊日历</button>
-            <button class="tab-btn" data-tab="study" onclick="switchTab('study')">📎 学习计划</button>
-            <button class="tab-btn" data-tab="events" onclick="switchTab('events')">🎾 群聊事件</button>
-            <button class="tab-btn" data-tab="raw" onclick="switchTab('raw')">📐 原始消息</button>
-        </div>
-        <div class="summary-content" id="summaryContent">
-            <p class="empty-tip">加载中...</p>
-        </div>
-    </div>
-    <script>
-        const messages = [{"time":"2026-05-12 14:20","sender":"啓","text":"📣 @all \"青心向国 大梦启航\"大地彩绘活动即将举办...活动通过掌印彩绘、创意白T绘制等形式完成主题创作。参与可获证书+第二课堂学时+综测。\n时间：5.16 上午9点\n地点：浮山海月广场","type":"event"},{"time":"2026-05-12 14:21","sender":"啓","text":"青岛大学首届 AI 智能体创新大赛（决赛）通知。","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com","type":"event"},{"time":"2026-05-13 14:07","sender":"啓","text":"https://mp.weixin.qq.com/s/U1gZCrsKM3a7nW_RAE1J2A","type":"event"},{"time":"2026-05-14 09:07","sender":"啓","text":"\"情系故土，礼赞家乡\"主题公益活动\n时间：5.13-5.22\n扫码上传摄影作品（家乡风光/人文/民俗），获综测+学时+公益证书。一等奖可获国家级媒体专访。\n活动QQ群：1078753135","type":"event"},{"time":"2026-05-16 11:33","sender":"啓","text":"2026年校排球赛队员召集令\n男女混合制（至少2位女同学）\n5.28开赛，5.19报名截止\n浮山西院排球场","type":"event"},{"time":"2026-05-16 18:37","sender":"啓","text":"2026校园健康跑报名通知\n5.23比赛，5.19下午4点截止\n男女各限15人，参赛记第二课堂","type":"event"},{"time":"2026-05-19 12:13","sender":"啓","text":"「妙笔纾心，向阳逐光」绘画解压活动\n时间：5.21下午1:40-3:00\n地点：博知楼511\n仅10个名额，扫码报名","type":"event"},{"time":"2026-05-23 19:26","sender":"啓","text":"公开竞选2026届学生会主席团及各中心负责人\n主席团限2024级，中心负责人2024/2025均可\n报名截止5.28 12:00\n材料交至博知楼316","type":"event"},{"time":"2026-05-26 12:36","sender":"啓","text":"山东省第八届大学生艺术展演选拔\n报名材料发至邮箱430078583@qq.com","type":"event"},{"time":"2026-05-28 18:05","sender":"啓","text":"\"大学生进社区\"实践案例征集\n5.31中午12点截止\n发至邮箱 qdu_jsjzyzxh@126.com","type":"event"},{"time":"2026-06-10 10:55","sender":"那你懂我意思了.","text":"⏰ 知到（智慧树）军事理论课 6.15截止刷课，6.20截止考试！大家抓紧","type":"study"},{"time":"2026-06-10 14:36","sender":"啓","text":"华为×济南博赛「蒲公英人才计划」\n496元考7张华为认证证书（含HCIA-AI、鸿蒙等）\n全程线上，名额有限","type":"event"},{"time":"2026-06-12 12:48","sender":"那你懂我意思了.","text":"📢 四级准考证可以下载打印啦！\nhttps://cet-bm.neea.edu.cn/","type":"study"},{"time":"2026-06-13 00:26","sender":"啓","text":"XCTF 百城千赛·高校AI+安全选拔赛-青岛大学站\n使用组织码 Z7CBU3JY54AW 在 攻防世界 报名\nQQ群：784697982","type":"event"},{"time":"2026-06-13 00:33","sender":"啓","text":"学生会换届竞选结果公示","type":"event"},{"time":"2026-06-13 00:34","sender":"啓","text":"📢 2026春季第二次学生证补办\n6.10下午3点截止！\n费用：学生证5元/优惠卡7元/都办12元\n交至博知楼316","type":"study"},{"sender":"潘林","time":"2026-06-15 22:05:32","text":"@全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈","type":"study"},{"time":"2026-06-16 15:36","sender":"啓","text":"\"两个结合\"青春践行主题作品征集展示活动截止时间延长至 6月18日。参与活动可获得相应综测加分。","type":"event"},{"time":"2026-06-17 17:51","sender":"啓","text":"挑战杯\"揭榜挂帅\"东北振兴产业升级专项赛已开始报名，请各位及时转发，通知有意向参与的同学加入赛事组织微信群","type":"event"},{"time":"2026-06-20 11:49","sender":"啓","text":"共青团中央维护青少年权益部2026年\"法治中国青春行\"暑期社会实践活动现已启动，有意向报名的同学或团队于6月22日午12点前发送至学院邮箱qdu_jsjzyzxh@126.com","type":"event"},{"time":"2026-06-21 16:28","sender":"啓","text":"想要感受一下毕业氛围的可以看看","type":"event"},{"time":"2026-06-22 15:23","sender":"那你懂我意思了.","text":"学生评教工作23号就要结束了没评教的同学不要忘了哈","type":"study"},{"time":"2026-06-22 15:23","sender":"那你懂我意思了.","text":"评教请优先使用电脑端Firefox/Chrome/360/QQ浏览器登录http://xjw.qdu.edu.cn/，手机端用企业微信。重修课程不参与评教","type":"study"},{"time":"2026-06-23 14:10","sender":"啓","text":"关于开展2026年青岛大学大学生暑期\"三下乡\"社会实践活动暨\"青年红色筑梦之旅\"活动的预备通知。大一、大二每班至少组织3支实践团队，以班级为单位于6月26日前发送至学院邮箱qdu_jsjzyzxh@126.com","type":"event"},{"time":"2026-06-24 08:51","sender":"巴士底囚","text":"C课程设计作业需要同学们本周日18点之前交齐：实验报告册、学生成绩管理系统的工程目录压缩包。交给学习委员。","type":"study"},{"time":"2026-06-26 11:30","sender":"那你懂我意思了.","text":"双创课的期末作业今天就要截止了大家不要忘了提交给李俊豪","type":"study"},{"sender":"陈政旭","text":"根据《青岛大学计算机科学技术学院学生会章程》，结合学生会工作需要，现面向全院2025级本科生公开竞选青岛大学计算机科学技术学院新一届学生会固定志愿者（副部长）。 ...","time":"2026-06-30T14:03:24.000Z","type":"event"},{"sender":"陈政旭","text":"[文件 关于公开竞选青岛大学计算机科学技术学院学生会固定志愿者的通知.docx]","time":"2026-06-30T14:03:24.000Z","type":"event"},{"sender":"陈政旭","text":"咱们班参与学生会干事有意愿留部的和想参加学生会的同学看一下这个","time":"2026-06-30T14:03:24.000Z","type":"event"},{"sender":"金建宇","text":"点击此路径可直接打开思政大课界面https://edu.peopleapp.com/sizheng202606/index.html","time":"2026-06-30T14:03:24.000Z","type":"study"},{"sender":"金建宇","text":"... ⚠️ 并于6月30日18点前填写该收集表，上传观看照片。","time":"2026-06-30T14:03:24.000Z","type":"event"},{"sender":"金建宇","text":"📢 ... [图片]","time":"2026-06-30T14:03:24.000Z","type":"event"}];
-        messages.sort((a, b) => new Date(a.time) - new Date(b.time));
+<div class="wrap">
 
-        const aiSummaryHTML = "<div class=\"section-title\" style=\"border-bottom-color:#c53030;\">📊 群聊概览</div><div class=\"stat-row\"><div class=\"stat-card\"><div class=\"num\">33</div><div class=\"label\">📩 总消息数</div></div><div class=\"stat-card\"><div class=\"num\">24</div><div class=\"label\">📙 通知/事件</div></div><div class=\"stat-card\"><div class=\"num\">9</div><div class=\"label\">📎 学习相关</div></div><div class=\"stat-card\"><div class=\"num\">6</div><div class=\"label\">🙁 发言人数</div></div></div><div class=\"section-title\">🔔 活跃时间段</div><p>群聊活跃从 <span class=\"highlight\">2026-05-12</span> 到 <span class=\"highlight\">2026-06-30</span>，共 21 天有消息。</p><div class=\"section-title\">📵 主题分类汇总</div><div class=\"sub-title\">📑 考试与学习任务</div><ul><li><strong>啓</strong> — 五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com</li><li><strong>啓</strong> — 2026年校排球赛队员召集令\n男女混合制（至少2位女同学）\n5.28开赛，5.19报名截止\n浮山西院排球场</li><li><strong>啓</strong> — 2026校园健康跑报名通知\n5.23比赛，5.19下午4点截止\n男女各限15人，参赛记第二课堂</li><li><strong>啓</strong> — 公开竞选2026届学生会主席团及各中心负责人\n主席团限2024级，中心负责人2024/2025均可\n报名截止5.28 12:00\n材料交至博知楼316</li><li><strong>啓</strong> — \"大学生进社区\"实践案例征集\n5.31中午12点截止\n发至邮箱 qdu_jsjzyzxh@126.com</li><li><strong>那你懂我意思了.</strong> — ⏰ 知到（智慧树）军事理论课 6.15截止刷课，6.20截止考试！大家抓紧</li><li><strong>那你懂我意思了.</strong> — 📢 四级准考证可以下载打印啦！\nhttps://cet-bm.neea.edu.cn/</li><li><strong>啓</strong> — 📢 2026春季第二次学生证补办\n6.10下午3点截止！\n费用：学生证5元/优惠卡7元/都办12元\n交至博知楼316</li><li><strong>潘林</strong> — @全体成员  军事理论知到网课今晚就截止啦，明天到二十号是期末考试时间大家不要忘了哈</li><li><strong>啓</strong> — \"两个结合\"青春践行主题作品征集展示活动截止时间延长至 6月18日。参与活动可获得相应综测加分。</li><li><strong>那你懂我意思了.</strong> — 学生评教工作23号就要结束了没评教的同学不要忘了哈</li><li><strong>那你懂我意思了.</strong> — 评教请优先使用电脑端Firefox/Chrome/360/QQ浏览器登录http://xjw.qdu.edu.cn/，手机端用企业微信。重修课程不参与评教</li><li><strong>那你懂我意思了.</strong> — 双创课的期末作业今天就要截止了大家不要忘了提交给李俊豪</li><li><strong>金建宇</strong> — 点击此路径可直接打开思政大课界面https://edu.peopleapp.com/sizheng202606/index.html</li></ul><div class=\"sub-title\">📫 作业与课程设计</div><ul><li><strong>巴士底囚</strong> — C课程设计作业需要同学们本周日18点之前交齐：实验报告册、学生成绩管理系统的工程目录压缩包。交给学习委员。</li><li><strong>那你懂我意思了.</strong> — 双创课的期末作业今天就要截止了大家不要忘了提交给李俊豪</li></ul><div class=\"sub-title\">🎾 校园活动/比赛</div><ul><li>📣 @all \"青心向国 大梦启航\"大地彩绘活动即将举办...活动通过掌印彩绘、创意白T绘制等形式完成主题创作。参与可获证书+第二课堂学时+综测。\n时间：5.16 上午9点\n地点：浮山海月广场</li><li>青岛大学首届 AI 智能体创新大赛（决赛）通知。</li><li>五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com</li><li>\"情系故土，礼赞家乡\"主题公益活动\n时间：5.13-5.22\n扫码上传摄影作品（家乡风光/人文/民俗），获综测+学时+公益证书。一等奖可获国家级媒体专访。\n活动QQ群：1078753135</li><li>2026校园健康跑报名通知\n5.23比赛，5.19下午4点截止\n男女各限15人，参赛记第二课堂</li><li>「妙笔纾心，向阳逐光」绘画解压活动\n时间：5.21下午1:40-3:00\n地点：博知楼511\n仅10个名额，扫码报名</li><li>公开竞选2026届学生会主席团及各中心负责人\n主席团限2024级，中心负责人2024/2025均可\n报名截止5.28 12:00\n材料交至博知楼316</li><li>学生会换届竞选结果公示</li><li>\"两个结合\"青春践行主题作品征集展示活动截止时间延长至 6月18日。参与活动可获得相应综测加分。</li><li>共青团中央维护青少年权益部2026年\"法治中国青春行\"暑期社会实践活动现已启动，有意向报名的同学或团队于6月22日午12点前发送至学院邮箱qdu_jsjzyzxh@126.com</li><li>关于开展2026年青岛大学大学生暑期\"三下乡\"社会实践活动暨\"青年红色筑梦之旅\"活动的预备通知。大一、大二每班至少组织3支实践团队，以班级为单位于6月26日前发送至学院邮箱qdu_jsjzyzxh@126.com</li><li>根据《青岛大学计算机科学技术学院学生会章程》，结合学生会工作需要，现面向全院2025级本科生公开竞选青岛大学计算机科学技术学院新一届学生会固定志愿者（副部长）。 ...</li><li>[文件 关于公开竞选青岛大学计算机科学技术学院学生会固定志愿者的通知.docx]</li><li>咱们班参与学生会干事有意愿留部的和想参加学生会的同学看一下这个</li></ul><div class=\"sub-title\">🌀 暑期社会实践</div><ul><li><strong>啓</strong> — 共青团中央维护青少年权益部2026年\"法治中国青春行\"暑期社会实践活动现已启动，有意向报名的同学或团队于6月22日午12点前发送至学院邮箱qdu_jsjzyzxh@126.com</li><li><strong>啓</strong> — 关于开展2026年青岛大学大学生暑期\"三下乡\"社会实践活动暨\"青年红色筑梦之旅\"活动的预备通知。大一、大二每班至少组织3支实践团队，以班级为单位于6月26日前发送至学院邮箱qdu_jsjzyzxh@126.com</li></ul><div class=\"section-title\">🙃 活跃成员榜</div><table><tr><th>排名</th><th>成员</th><th>发言数</th></tr><tr><td>🥇</td><td><strong>啓</strong></td><td>20 条</td></tr><tr><td>🥈</td><td><strong>那你懂我意思了.</strong></td><td>5 条</td></tr><tr><td>🥉</td><td><strong>陈政旭</strong></td><td>3 条</td></tr><tr><td>4</td><td><strong>金建宇</strong></td><td>3 条</td></tr><tr><td>5</td><td><strong>潘林</strong></td><td>1 条</td></tr><tr><td>6</td><td><strong>巴士底囚</strong></td><td>1 条</td></tr></table><div class=\"section-title\">🔽 关键词分类</div><table><tr><th>分类</th><th>关键词</th></tr><tr><td><strong>📑 考试/学习</strong></td><td>考试、期末、评教、四级、军事理论、知到、网课、双创、思政大课</td></tr><tr><td><strong>🎾 活动/比赛</strong></td><td>活动、比赛、竞选、演讲、学生会、志愿者</td></tr><tr><td><strong>📫 作业/课程</strong></td><td>作业、实验、报告、设计、课程、C语言、提交</td></tr><tr><td><strong>🛡 认证/证书</strong></td><td>华为、认证、证书、XCTF、蒲公英、HCIA</td></tr><tr><td><strong>📙 通知/事项</strong></td><td>报名、截止、换届、补办、暑期、社会实践、收集表</td></tr></table><div class=\"section-title\" style=\"border-bottom-color:#c53030;\">💕 AI 智能总结</div><p>本群消息汇总覆盖了 <strong>2026-05-12</strong> 的 <strong>33条</strong> 消息。<br>📑 <strong>考试与通知：</strong>五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com；2026年校排球赛队员召集令\n男女混合制（至少2位女同学）\n5.28开赛，5.19报名截止\n浮山西院排球场；2026校园健康跑报名通知\n5.23比赛，5.19下午4点截止\n男女各限15人，参赛记第二课堂；公开竞选2026届学生会主席团及各中心负责人\n主席团限2024级，中心负<br>🎾 <strong>校园活动：</strong>📣 @all \"青心向国 大梦启航\"大地彩绘活动即将举办...活动通过掌印彩绘、创意白T绘制等形式完成主题创作。参与可获证书+第二课堂学时+综测。\n时间：5.16 上午9点\n地点：浮山海月广场；青岛大学首届 AI 智能体创新大赛（决赛）通知。；五四朗诵比赛报名通知 ✨\n用朗诵诉说青春。报名截止5.14 9:00\n发送至邮箱 qdu_computer@126.com；\"情系故土，礼赞家乡\"主题公益<br><br>📌 <strong>今日关注：</strong>暂无特别关注事项。<br>📌 期待新学期更多群聊互动～</p>";
+<header>
+  <h1>一共就五步，你们肯定能做到</h1>
+  
+</header>
 
-        function buildSummary() {
-            return '<div class="section-title">🏻 AI 智能总结</div>' +
-                '<p style="color:#888;font-size:13px;margin-bottom:12px;">基于 ' + messages.length + ' 条群消息的自动分析汇总</p>' +
-                aiSummaryHTML;
-        }
+<div class="card">
+  <h2><span class="step-tag">.1</span>安装 Node.js</h2>
+  <ol>
+    <li>访问 <a href="https://nodejs.org/" target="_blank" rel="noopener">https://nodejs.org/</a> 下载 <strong>LTS 版本</strong>安装包。</li>
+    <li>一路下一步安装，保持默认选项（自动加入 PATH）。</li>
+    <li>验证安装，打开 PowerShell 执行：</li>
+  </ol>
+  <pre><code>node -v
+npm -v</code></pre>
+  <div class="note">能输出版本号即安装成功。要求 <strong>Node.js 18 或更高版本</strong>。</div>
+  <figure class="fig">
+    <img src="deploy-guide_files/01-node-version.png" alt="验证 Node.js 与 npm 版本">
+    <figcaption class="fig-caption">图1：验证安装 —— node -v 返回 v24.16.0，npm -v 返回 11.13.0</figcaption>
+  </figure>
+</div>
 
-        function buildCalendar() {
-            const calMap = {};
-            messages.forEach(m => {
-                const d = m.time.slice(0, 10);
-                if (!calMap[d]) calMap[d] = { events: 0, studies: 0, total: 0 };
-                calMap[d].total++;
-                if (m.type === 'study') calMap[d].studies++;
-                else calMap[d].events++;
-            });
-            const dates = Object.keys(calMap).sort();
-            const total = messages.length;
-            const evt = messages.filter(m => m.type === 'event').length;
-            const std = messages.filter(m => m.type === 'study').length;
+<div class="card">
+  <h2><span class="step-tag">.2</span>配置 NapCat</h2>
+  <ol>
+    <li>安装 NapCat（在https://github.com/NapNeko/NapCatQQ/releases下载 NapCat.Shell.zip）(有时候会登不上，我放网盘了https://wwatb.lanzouw.com/ivycm434st2b)</li>
+    <li>启动 NapCat（双击C:\&lt;目录&gt;\NapCat.Shell\launcher.bat），使用目标 QQ 账号<strong>扫码登录</strong>（首次必须扫码，登录态会保留）。<ul>
+    <li><strong>WebUI 面板</strong>：地址 <code>http://127.0.0.1:&lt;端口&gt;/webui?token=&lt;token&gt;（下图中绿色的部分，直接Ctri+c  Ctri+v复制到浏览器）</code>。</li>
+  <figure class="fig">
+    <img src="deploy-guide_files/05-napcat-startup-log.png" alt="NapCat 启动日志">
+    
+  </figure></ul></li>
+  </ol>
+  
+  
+  <figure class="fig">
+    <img src="deploy-guide_files/02-napcat-network.png" alt="NapCat 网络配置页 ws-sign 卡片">
+    
+  </figure>
+  <figure class="fig">
+    <img src="deploy-guide_files/03-napcat-network-menu.png" alt="网络配置类型筛选菜单">
+    
+  </figure>
+  <figure class="fig">
+    <img src="deploy-guide_files/04-ws-sign-edit.png" alt="ws-sign 编辑弹窗">
+    
+  </figure>
+  <ol start="3">
+    <li>确认服务已监听，PowerShell 验证：</li>
+  </ol>
+  <pre><code>Test-NetConnection 127.0.0.1 -Port 6701</code></pre>
+  <div class="note"><code>TcpTestSucceeded : True</code> 表示端口已就绪。</div>
+  <h3>关于登录与 WebUI</h3>
+  <ul>
+    <li><strong>快速登录</strong>：命令行 <code>-q &lt;QQ号&gt;</code> 参数在 Shell 版启动器中会被丢弃（注入环节丢失），首次扫码成功后登录态保留，之后设置快速登陆（不必每次登陆扫码）在"系统配置 → 快速登录QQ"里指定账号：</li>
+  </ul>
+  <figure class="fig">
+    <img src="deploy-guide_files/06-quick-login.png" alt="快速登录QQ配置">
+    
+  </figure>
+  
+  
+</div>
 
-            let html = '<div class="section-title">📮 群聊日历</div>';
-            html += '<div class="stat-row">';
-            html += '<div class="stat-card"><div class="num">' + total + '</div><div class="label">总消息数</div></div>';
-            html += '<div class="stat-card"><div class="num">' + evt + '</div><div class="label">📙 事件</div></div>';
-            html += '<div class="stat-card"><div class="num">' + std + '</div><div class="label">📎 学习</div></div>';
-            html += '</div>';
-            html += '<table><tr><th>日期</th><th>事件/学习</th><th>消息数</th></tr>';
-            dates.forEach(d => {
-                const c = calMap[d];
-                html += '<tr><td>' + d.slice(5) + '</td><td>' + c.events + ' 个事件 / ' + c.studies + ' 个学习</td><td>' + c.total + ' 条</td></tr>';
-            });
-            html += '</table>';
-            return html;
-        }
+<div class="card">
+  <h2><span class="step-tag">.3</span>安装脚本依赖</h2>
+  <p>win+r,输入cmd,cd进入脚本目录（含 <code>package.json</code> 的目录）（我把脚本放网盘了&lt;https://wwatb.lanzouw.com/i5AwG434t3nc&gt;，记得脚本解压在那个目录里，后面会用）执行：</p>
+  <pre><code>cd &lt;脚本目录&gt;
+npm install</code></pre>
+  <div class="note">成功后目录下会出现 <code>node_modules</code> 文件夹。</div>
+</div>
 
-        function buildStudy() {
-            const items = messages.filter(m => m.type === 'study');
-            let html = '<div class="section-title">📎 学习计划与考试提醒</div>';
-            if (items.length === 0) { html += '<p class="empty-tip">暂无学习计划</p>'; return html; }
-            items.forEach(m => {
-                html += '<div class="msg-item" style="border-left-color:#0f7b3e;">' +
-                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + (m.time||'').slice(0,16).replace('T',' ') + '</span></div>' +
-                    '<div class="msg-text">' + (m.text||'').replace(/</g,'&lt;').replace(/\\n/g,'<br>') + '</div></div>';
-            });
-            return html;
-        }
+<div class="card">
+  <h2><span class="step-tag">.4</span>手动测试签到</h2>
+  <pre><code>node qq_sign.js &lt;群号&gt;</code></pre>
+  <p><strong>预期输出（成功）：</strong></p>
+  <pre><code>🔄 群 123456789 签到中...
+✅ 群 123456789 签到成功！
+{"status":"ok","retcode":0,...}</code></pre>
+  
+</div>
 
-        function buildEvents() {
-            const items = messages.filter(m => m.type === 'event');
-            let html = '<div class="section-title">🎾 群聊事件与通知</div>';
-            if (items.length === 0) { html += '<p class="empty-tip">暂无事件</p>'; return html; }
-            items.forEach(m => {
-                const diffDays = Math.floor((new Date() - new Date(m.time)) / (1000*60*60*24));
-                html += '<div class="msg-item"' + (diffDays <= 7 ? ' style="border-left-color:#d97706;background:#fffbeb;"' : '') + '>' +
-                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + (m.time||'').slice(0,16).replace('T',' ') + '</span>' +
-                    (diffDays <= 7 ? ' <span class="tag tag-red">近期</span>' : '') +
-                    '</div><div class="msg-text">' + (m.text||'').replace(/</g,'&lt;').replace(/\\n/g,'<br>') + '</div></div>';
-            });
-            return html;
-        }
+<div class="card">
+  <h2><span class="step-tag">.5</span>安装计划任务（自动签到）</h2>
+  <p>以<strong>管理员身份</strong>打开 PowerShell，执行：</p>
+  
+  
+  
+  
 
-        function buildRaw() {
-            let html = '<div class="section-title">📐 原始群聊（按时间倒序）</div>';
-            const reversed = [...messages].reverse();
-            reversed.forEach(m => {
-                const typeClass = m.type === 'study' ? 'tag-green' : 'tag-purple';
-                const typeLabel = m.type === 'study' ? '学习' : '事件';
-                html += '<div class="msg-item">' +
-                    '<div><span class="msg-sender">' + m.sender + '</span><span class="msg-time">' + (m.time||'').slice(0,16).replace('T',' ') + '</span>' +
-                    '<span class="tag ' + typeClass + '">' + typeLabel + '</span></div>' +
-                    '<div class="msg-text">' + (m.text||'').replace(/</g,'&lt;').replace(/\\n/g,'<br>') + '</div></div>';
-            });
-            return html;
-        }
+  
+  <pre><code>schtasks /create /tn QQGroupSign /tr "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\&lt;脚本目录&gt;\qq_sign_task.ps1" /sc daily /st 00:00 /rl highest /f</code></pre>
 
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
-            const content = document.getElementById('summaryContent');
-            switch(tab) {
-                case 'summary': content.innerHTML = buildSummary(); break;
-                case 'calendar': content.innerHTML = buildCalendar(); break;
-                case 'study': content.innerHTML = buildStudy(); break;
-                case 'events': content.innerHTML = buildEvents(); break;
-                case 'raw': content.innerHTML = buildRaw(); break;
-            }
-        }
+  <h3>安装 NapCat 自动启动任务（请确保napcat的快速登陆可以正常使用，你也不想每天23：55还得扫码登陆吧）</h3>
+  <pre><code>schtasks /create /tn NapCatAutoStart /tr "C:\&lt;NapCat目录&gt;\launcher.bat" /sc daily /st 23:55 /rl highest /f</code></pre>
+  <figure class="fig">
+    <img src="deploy-guide_files/07-schtasks.png" alt="schtasks 创建 NapCatAutoStart 成功">
+    <figcaption class="fig-caption"></figcaption>
+  </figure>
 
-        switchTab('summary');
-    </script>
-</body>
-</html>
+  
+</div>
+
+
+
+</div>
+
+
+</body></html>
