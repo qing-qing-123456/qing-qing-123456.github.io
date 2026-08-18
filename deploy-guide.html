@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<!-- saved from url=(0102)file:///C:/Users/shiyi/Desktop/work/qq_sign_package/%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%AE%89%E8%A3%85.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>部署与安装 - QQ群自动签到系统</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --text: #1f2328;
+    --muted: #59636e;
+    --accent: #2b7de9;
+    --accent-dark: #1a5fc7;
+    --border: #d8dee4;
+    --code-bg: #0d1117;
+    --code-text: #e6edf3;
+    --warn-bg: #fff8c5;
+    --warn-border: #d4a72c;
+    --ok: #1a7f37;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 24px 16px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  header {
+    background: linear-gradient(135deg, #1a5fc7, #2b7de9);
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+  }
+  header h1 { font-size: 24px; margin-bottom: 6px; }
+  header p { font-size: 14px; opacity: .9; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  h2 {
+    font-size: 20px;
+    color: var(--accent-dark);
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  h3 { font-size: 16px; margin: 18px 0 10px; }
+  ol, ul { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  code {
+    background: rgba(43,125,233,.08);
+    color: #0b5cab;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+  }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 10px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  pre code { background: none; color: inherit; padding: 0; font-size: 13px; }
+  .warn {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-border);
+    border-left: 4px solid var(--warn-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .note {
+    background: #eaf4ff;
+    border: 1px solid #b6d7ff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  th { background: #f0f3f6; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .fig { margin: 14px 0; text-align: center; }
+  .fig img { max-width: 100%; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .fig-caption { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+  .step-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    border-radius: 20px;
+    padding: 2px 12px;
+    margin-right: 8px;
+    vertical-align: 2px;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    margin: 24px 0 8px;
+  }
+  @media (max-width: 600px) {
+    .card { padding: 16px; }
+    header { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>一共就五步，你们肯定能做到</h1>
+  
+</header>
+
+<div class="card">
+  <h2><span class="step-tag">.1</span>安装 Node.js</h2>
+  <ol>
+    <li>访问 <a href="https://nodejs.org/" target="_blank" rel="noopener">https://nodejs.org/</a> 下载 <strong>LTS 版本</strong>安装包。</li>
+    <li>一路下一步安装，保持默认选项（自动加入 PATH）。</li>
+    <li>验证安装，打开 PowerShell 执行：</li>
+  </ol>
+  <pre><code>node -v
+npm -v</code></pre>
+  <div class="note">能输出版本号即安装成功。要求 <strong>Node.js 18 或更高版本</strong>。</div>
+  <figure class="fig">
+    <img src="deploy-guide_files/01-node-version.png" alt="验证 Node.js 与 npm 版本">
+    <figcaption class="fig-caption">图1：验证安装 —— node -v 返回 v24.16.0，npm -v 返回 11.13.0</figcaption>
+  </figure>
+</div>
+
+<div class="card">
+  <h2><span class="step-tag">.2</span>配置 NapCat</h2>
+  <ol>
+    <li>安装 NapCat（在https://github.com/NapNeko/NapCatQQ/releases下载 NapCat.Shell.zip）(有时候会登不上，我放网盘了https://wwatb.lanzouw.com/ivycm434st2b)</li>
+    <li>启动 NapCat（双击C:\&lt;目录&gt;\NapCat.Shell\launcher.bat），使用目标 QQ 账号<strong>扫码登录</strong>（首次必须扫码，登录态会保留）。<ul>
+    <li><strong>WebUI 面板</strong>：地址 <code>http://127.0.0.1:&lt;端口&gt;/webui?token=&lt;token&gt;（下图中绿色的部分，直接Ctri+c  Ctri+v复制到浏览器）</code>。</li>
+  <figure class="fig">
+    <img src="deploy-guide_files/05-napcat-startup-log.png" alt="NapCat 启动日志">
+    
+  </figure></ul></li>
+  </ol>
+  
+  
+  <figure class="fig">
+    <img src="deploy-guide_files/02-napcat-network.png" alt="NapCat 网络配置页 ws-sign 卡片">
+    
+  </figure>
+  <figure class="fig">
+    <img src="deploy-guide_files/03-napcat-network-menu.png" alt="网络配置类型筛选菜单">
+    
+  </figure>
+  <figure class="fig">
+    <img src="deploy-guide_files/04-ws-sign-edit.png" alt="ws-sign 编辑弹窗">
+    
+  </figure>
+  <ol start="3">
+    <li>确认服务已监听，PowerShell 验证：</li>
+  </ol>
+  <pre><code>Test-NetConnection 127.0.0.1 -Port 6701</code></pre>
+  <div class="note"><code>TcpTestSucceeded : True</code> 表示端口已就绪。</div>
+  <h3>关于登录与 WebUI</h3>
+  <ul>
+    <li><strong>快速登录</strong>：命令行 <code>-q &lt;QQ号&gt;</code> 参数在 Shell 版启动器中会被丢弃（注入环节丢失），首次扫码成功后登录态保留，之后设置快速登陆（不必每次登陆扫码）在"系统配置 → 快速登录QQ"里指定账号：</li>
+  </ul>
+  <figure class="fig">
+    <img src="deploy-guide_files/06-quick-login.png" alt="快速登录QQ配置">
+    
+  </figure>
+  
+  
+</div>
+
+<div class="card">
+  <h2><span class="step-tag">.3</span>安装脚本依赖</h2>
+  <p>win+r,输入cmd,cd进入脚本目录（含 <code>package.json</code> 的目录）（我把脚本放网盘了&lt;https://wwatb.lanzouw.com/i5AwG434t3nc&gt;，记得脚本解压在那个目录里，后面会用）执行：</p>
+  <pre><code>cd &lt;脚本目录&gt;
+npm install</code></pre>
+  <div class="note">成功后目录下会出现 <code>node_modules</code> 文件夹。</div>
+</div>
+
+<div class="card">
+  <h2><span class="step-tag">.4</span>手动测试签到</h2>
+  <pre><code>node qq_sign.js &lt;群号&gt;</code></pre>
+  <p><strong>预期输出（成功）：</strong></p>
+  <pre><code>🔄 群 123456789 签到中...
+✅ 群 123456789 签到成功！
+{"status":"ok","retcode":0,...}</code></pre>
+  
+</div>
+
+<div class="card">
+  <h2><span class="step-tag">.5</span>安装计划任务（自动签到）</h2>
+  <p>以<strong>管理员身份</strong>打开 PowerShell，执行：</p>
+  
+  
+  
+  
+
+  
+  <pre><code>schtasks /create /tn QQGroupSign /tr "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\&lt;脚本目录&gt;\qq_sign_task.ps1" /sc daily /st 00:00 /rl highest /f</code></pre>
+
+  <h3>安装 NapCat 自动启动任务（请确保napcat的快速登陆可以正常使用，你也不想每天23：55还得扫码登陆吧）</h3>
+  <pre><code>schtasks /create /tn NapCatAutoStart /tr "C:\&lt;NapCat目录&gt;\launcher.bat" /sc daily /st 23:55 /rl highest /f</code></pre>
+  <figure class="fig">
+    <img src="deploy-guide_files/07-schtasks.png" alt="schtasks 创建 NapCatAutoStart 成功">
+    <figcaption class="fig-caption"></figcaption>
+  </figure>
+
+  
+</div>
+
+
+
+</div>
+
+
+</body></html>
